@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Трекер занятий</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         oklch(97% 0.005 250);
+      --surface:    oklch(100% 0 0);
+      --raised:     oklch(95% 0.008 250);
+      --border:     oklch(88% 0.010 250);
+      --muted:      oklch(58% 0.015 250);
+      --body:       oklch(20% 0.015 250);
+      --accent:     oklch(56% 0.18  250);
+      --accent-lt:  oklch(94% 0.04  250);
+      --accent-dk:  oklch(44% 0.18  250);
+      --success:    oklch(54% 0.16  150);
+      --success-lt: oklch(94% 0.04  150);
+      --danger:     oklch(52% 0.18   25);
+      --danger-lt:  oklch(95% 0.04   25);
+      --warn:       oklch(62% 0.16   75);
+      --warn-lt:    oklch(96% 0.04   75);
+      --r-sm: 6px; --r: 10px; --r-lg: 16px;
+      --sh-sm: 0 1px 3px oklch(0% 0 0 / .08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:         oklch(14% 0.010 250);
+        --surface:    oklch(18% 0.012 250);
+        --raised:     oklch(22% 0.012 250);
+        --border:     oklch(30% 0.014 250);
+        --muted:      oklch(60% 0.012 250);
+        --body:       oklch(92% 0.008 250);
+        --accent:     oklch(68% 0.16  250);
+        --accent-lt:  oklch(22% 0.05  250);
+        --accent-dk:  oklch(78% 0.14  250);
+        --success:    oklch(66% 0.14  150);
+        --success-lt: oklch(20% 0.05  150);
+        --danger:     oklch(66% 0.16   25);
+        --danger-lt:  oklch(20% 0.06   25);
+        --warn:       oklch(74% 0.14   75);
+        --warn-lt:    oklch(20% 0.05   75);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0ms !important; }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--body);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100dvh;
+    }
+
+    /* ── Header ── */
+    .app-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: var(--sh-sm);
+    }
+    .app-header h1 { font-size: 16px; font-weight: 600; }
+    .app-header .date-label { font-size: 13px; color: var(--muted); margin-left: auto; }
+
+    /* ── Layout ── */
+    .layout {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 20px 16px 72px;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (max-width: 680px) {
+      .layout { grid-template-columns: 1fr; padding: 14px 12px 72px; }
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      box-shadow: var(--sh-sm);
+      overflow: hidden;
+    }
+    .card-hd {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .card-hd h2 {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--muted);
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 14px;
+      border-radius: var(--r-sm);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background 140ms, color 140ms, border-color 140ms;
+      white-space: nowrap;
+      line-height: 1;
+    }
+    .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-primary  { background: var(--accent); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--accent-dk); }
+    .btn-ghost    { background: transparent; color: var(--accent); border-color: var(--border); }
+    .btn-ghost:hover:not(:disabled)   { background: var(--accent-lt); }
+    .btn-danger   { background: transparent; color: var(--danger); border-color: var(--border); }
+    .btn-danger:hover:not(:disabled)  { background: var(--danger-lt); }
+    .btn-sm   { padding: 4px 10px; font-size: 13px; }
+    .btn-icon { padding: 5px 7px; }
+
+    /* ── Form ── */
+    .fg { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
+    .fg:last-child { margin-bottom: 0; }
+    label { font-size: 13px; font-weight: 500; }
+    .hint { font-size: 12px; color: var(--muted); font-weight: 400; }
+    input[type="text"], input[type="number"], input[type="date"] {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: 14px;
+      background: var(--raised);
+      color: var(--body);
+      width: 100%;
+      transition: border-color 140ms, box-shadow 140ms;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px oklch(56% 0.18 250 / .14);
+    }
+    .ferr { font-size: 12px; color: var(--danger); min-height: 15px; }
+
+    /* ── Student list ── */
+    .s-list { display: flex; flex-direction: column; gap: 1px; padding: 6px; }
+    .s-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: var(--r);
+      cursor: pointer;
+      transition: background 120ms;
+    }
+    .s-item:hover { background: var(--raised); }
+    .s-item.active { background: var(--accent-lt); }
+    .s-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .s-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--accent-lt);
+      color: var(--accent);
+      font-weight: 700; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .s-info { flex: 1; min-width: 0; }
+    .s-name { font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .s-sub  { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* balance badge */
+    .bal {
+      font-size: 13px; font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 100px;
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .bal-ok   { background: var(--success-lt); color: var(--success); }
+    .bal-warn { background: var(--warn-lt);    color: var(--warn);    }
+    .bal-zero { background: var(--danger-lt);  color: var(--danger);  }
+
+    .empty-state { text-align: center; padding: 32px 16px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .empty-icon  { font-size: 30px; margin-bottom: 8px; }
+
+    /* ── Detail ── */
+    .detail-ph { text-align: center; padding: 72px 24px; color: var(--muted); }
+    .detail-ph .icon { font-size: 44px; margin-bottom: 12px; }
+
+    /* Stats row */
+    .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 18px; }
+    @media (max-width: 440px) { .stats { grid-template-columns: repeat(2,1fr); } }
+    .stat {
+      background: var(--raised);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+    }
+    .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+    .stat-val { font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+    .stat-val.ok   { color: var(--success); }
+    .stat-val.warn { color: var(--warn);    }
+    .stat-val.low  { color: var(--danger);  }
+
+    /* Big lesson button */
+    .lesson-btn-wrap { margin-bottom: 18px; }
+    .lesson-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--r);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px dashed var(--border);
+      background: var(--raised);
+      color: var(--body);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 140ms, border-color 140ms, color 140ms;
+    }
+    .lesson-btn:hover:not(:disabled) {
+      background: var(--success-lt);
+      border-color: var(--success);
+      color: var(--success);
+    }
+    .lesson-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .lesson-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .lesson-btn.debt {
+      border-color: var(--warn);
+      color: var(--warn);
+    }
+    .lesson-btn.debt:hover:not(:disabled) {
+      background: var(--warn-lt);
+      border-color: var(--warn);
+      color: var(--warn);
+    }
+
+    /* History table */
+    .tbl-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead { background: var(--raised); }
+    th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .05em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--raised); }
+    .mono { font-variant-numeric: tabular-nums; }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 100px;
+    }
+    .tag-pay { background: var(--success-lt); color: var(--success); }
+    .tag-use { background: var(--raised);     color: var(--muted);   border: 1px solid var(--border); }
+
+    /* ── Modal ── */
+    .backdrop {
+      position: fixed; inset: 0;
+      background: oklch(0% 0 0 / .4);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200;
+      padding: 16px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 180ms;
+    }
+    .backdrop.open { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--surface);
+      border-radius: var(--r-lg);
+      box-shadow: 0 8px 32px oklch(0% 0 0 / .20);
+      width: 100%; max-width: 420px;
+      transform: translateY(14px);
+      transition: transform 180ms;
+    }
+    .backdrop.open .modal { transform: translateY(0); }
+    .modal-hd {
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-hd h3 { font-size: 15px; font-weight: 600; }
+    .modal-bd { padding: 18px; }
+    .modal-ft { padding: 10px 18px 16px; display: flex; justify-content: flex-end; gap: 8px; }
+  </style>
+</head>
+<body>
+
+<header class="app-header">
+  <span style="font-size:20px" aria-hidden="true">📚</span>
+  <h1>Трекер занятий</h1>
+  <span class="date-label" id="hdrDate"></span>
+</header>
+
+<div class="layout">
+  <!-- Sidebar -->
+  <aside>
+    <div class="card">
+      <div class="card-hd">
+        <h2>Ученики</h2>
+        <button class="btn btn-primary btn-sm" onclick="openAddStudent()">+ Добавить</button>
+      </div>
+      <div class="s-list" id="studentList"></div>
+    </div>
+  </aside>
+
+  <!-- Detail -->
+  <main>
+    <div id="detail">
+      <div class="detail-ph">
+        <div class="icon">👈</div>
+        <p style="font-size:14px">Выберите ученика слева</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ── Modal: New student ── -->
+<div class="backdrop" id="mAddStudent" role="dialog" aria-modal="true" aria-labelledby="mAddStudentLbl">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="mAddStudentLbl">Новый ученик</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeM('mAddStudent')" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fg">
+        <label for="sName">Имя</label>
+        <input type="text" id="sName" placeholder="Аня Смирнова" autocomplete="off" />
+        <span class="ferr" id="eSName"></span>
+      </div>
+      <div class="fg">
+        <label for="sSubj">Предмет <span class="hint">(необязательно)</span></label>
+        <input type="text" id="sSubj" placeholder="Математика, английский…" autocomplete="off" />
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeM('mAddStudent')">Отмена</button>
+      <button class="btn btn-primary" onclick="saveStudent()">Добавить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal: Add payment ── -->
+<div class="backdrop" id="mAddPay" role="dialog" aria-modal="true" aria-labelledby="mAddPayLbl">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="mAddPayLbl">Записать оплату</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeM('mAddPay')" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fg">
+        <label for="pDate">Дата оплаты</label>
+        <input type="date" id="pDate" />
+      </div>
+      <div class="fg">
+        <label for="pLessons">Количество занятий</label>
+        <input type="number" id="pLessons" placeholder="4" min="1" step="1" />
+        <span class="ferr" id="ePLessons"></span>
+      </div>
+      <div class="fg">
+        <label for="pNote">Заметка <span class="hint">(необязательно)</span></label>
+        <input type="text" id="pNote" placeholder="За апрель, пакет 8 занятий…" />
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeM('mAddPay')">Отмена</button>
+      <button class="btn btn-primary" onclick="savePay()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal: Mark lesson done ── -->
+<div class="backdrop" id="mLesson" role="dialog" aria-modal="true" aria-labelledby="mLessonLbl">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="mLessonLbl">Занятие прошло</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeM('mLesson')" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="fg">
+        <label for="lDate">Дата</label>
+        <input type="date" id="lDate" />
+      </div>
+      <div class="fg">
+        <label for="lCount">Количество занятий <span class="hint">(обычно 1)</span></label>
+        <input type="number" id="lCount" value="1" min="1" step="1" />
+        <span class="ferr" id="eLCount"></span>
+      </div>
+      <div class="fg">
+        <label for="lNote">Тема / заметка <span class="hint">(необязательно)</span></label>
+        <input type="text" id="lNote" placeholder="Тема урока…" />
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeM('mLesson')">Отмена</button>
+      <button class="btn btn-primary" onclick="saveLesson()">Отметить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal: Confirm delete student ── -->
+<div class="backdrop" id="mDelStudent" role="dialog" aria-modal="true" aria-labelledby="mDelStudentLbl">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3 id="mDelStudentLbl">Удалить ученика?</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeM('mDelStudent')" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="modal-bd">
+      <p id="delStudentText" style="font-size:14px;line-height:1.6"></p>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeM('mDelStudent')">Отмена</button>
+      <button class="btn btn-danger" onclick="confirmDelStudent()">Удалить</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Persistence ───────────────────────────────────────
+const KEY = 'tutor_v2';
+function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {students:[]}; } catch { return {students:[]}; } }
+function persist() { localStorage.setItem(KEY, JSON.stringify(db)); }
+
+// ── State ─────────────────────────────────────────────
+let db = load();
+let sel = null;        // selected student id
+let pendDel = null;    // student id pending delete
+
+// ── Utilities ─────────────────────────────────────────
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function today() { return new Date().toISOString().slice(0,10); }
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const [y,m,d] = iso.split('-');
+  return `${d}.${m}.${y}`;
+}
+function esc(s) {
+  return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function initials(name) {
+  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+}
+function getS(id) { return db.students.find(s=>s.id===id); }
+function balance(s) {
+  const paid = (s.payments||[]).reduce((a,p)=>a+p.lessons,0);
+  const used = (s.lessons ||[]).reduce((a,l)=>a+l.count,0);
+  return paid - used;
+}
+
+// ── Render ────────────────────────────────────────────
+function render() {
+  renderList();
+  sel ? renderDetail(sel) : renderPlaceholder();
+}
+
+function renderList() {
+  const el = document.getElementById('studentList');
+  if (!db.students.length) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">👩‍🎓</div>Нет учеников.<br>Нажмите «+ Добавить».</div>`;
+    return;
+  }
+  el.innerHTML = db.students.map(s => {
+    const bal = balance(s);
+    const bc  = bal > 2 ? 'bal-ok' : bal > 0 ? 'bal-warn' : 'bal-zero';
+    const active = s.id === sel ? ' active' : '';
+    return `<div class="s-item${active}" tabindex="0" role="button"
+        onclick="selectS('${s.id}')" onkeydown="if(event.key==='Enter'||event.key===' ')selectS('${s.id}')">
+      <div class="s-avatar">${esc(initials(s.name))}</div>
+      <div class="s-info">
+        <div class="s-name">${esc(s.name)}</div>
+        ${s.subject ? `<div class="s-sub">${esc(s.subject)}</div>` : '<div class="s-sub" style="height:16px"></div>'}
+      </div>
+      <span class="bal ${bc}">${bal}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderPlaceholder() {
+  document.getElementById('detail').innerHTML =
+    `<div class="detail-ph"><div class="icon">👈</div><p style="font-size:14px">Выберите ученика слева</p></div>`;
+}
+
+function renderDetail(id) {
+  const s = getS(id);
+  if (!s) { renderPlaceholder(); return; }
+
+  const bal  = balance(s);
+  const paid = (s.payments||[]).reduce((a,p)=>a+p.lessons,0);
+  const used = (s.lessons ||[]).reduce((a,l)=>a+l.count,0);
+  const bc   = bal > 2 ? 'ok' : bal > 0 ? 'warn' : 'low';
+
+  // merged timeline
+  const rows = [
+    ...(s.payments||[]).map(p=>({...p,_t:'pay'})),
+    ...(s.lessons ||[]).map(l=>({...l,_t:'use'})),
+  ].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+
+  const tBody = rows.length ? rows.map(r => {
+    if (r._t === 'pay') {
+      return `<tr>
+        <td>${fmtDate(r.date)}</td>
+        <td><span class="tag tag-pay">Оплата</span></td>
+        <td class="mono" style="color:var(--success);font-weight:600">+${r.lessons} зан.</td>
+        <td style="color:var(--muted)">${r.note ? esc(r.note) : '—'}</td>
+        <td><button class="btn btn-icon btn-danger btn-sm" onclick="delEntry('${s.id}','pay','${r.id}')" aria-label="Удалить">✕</button></td>
+      </tr>`;
+    } else {
+      return `<tr>
+        <td>${fmtDate(r.date)}</td>
+        <td><span class="tag tag-use">Занятие</span></td>
+        <td class="mono" style="color:var(--muted)">−${r.count} зан.</td>
+        <td style="color:var(--muted)">${r.note ? esc(r.note) : '—'}</td>
+        <td><button class="btn btn-icon btn-danger btn-sm" onclick="delEntry('${s.id}','use','${r.id}')" aria-label="Удалить">✕</button></td>
+      </tr>`;
+    }
+  }).join('') : `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;font-size:13px">Записей пока нет</td></tr>`;
+
+  document.getElementById('detail').innerHTML = `
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:20px;font-weight:700;line-height:1.2">${esc(s.name)}</div>
+        ${s.subject ? `<div style="font-size:13px;color:var(--muted);margin-top:3px">${esc(s.subject)}</div>` : ''}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:2px">
+        <button class="btn btn-primary btn-sm" onclick="openAddPay('${s.id}')">+ Оплата</button>
+        <button class="btn btn-danger  btn-sm" style="font-size:12px" onclick="openDelStudent('${s.id}')">Удалить</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-lbl">Остаток</div>
+        <div class="stat-val ${bc}">${bal}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Оплачено</div>
+        <div class="stat-val">${paid}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl">Проведено</div>
+        <div class="stat-val">${used}</div>
+      </div>
+    </div>
+
+    <div class="lesson-btn-wrap">
+      <button class="lesson-btn${bal<0?' debt':''}" onclick="openLesson('${s.id}')">
+        <span style="font-size:18px">${bal<0?'⚠️':'✅'}</span>
+        Занятие прошло${bal<0?' (долг: '+Math.abs(bal)+' зан.)':bal===0?' (баланс 0)':''}
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><h2>История</h2></div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Дата</th><th>Тип</th><th>Занятия</th><th>Заметка</th><th></th></tr></thead>
+          <tbody>${tBody}</tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+// ── Student CRUD ──────────────────────────────────────
+function selectS(id) { sel = id; render(); }
+
+function openAddStudent() {
+  document.getElementById('sName').value  = '';
+  document.getElementById('sSubj').value  = '';
+  document.getElementById('eSName').textContent = '';
+  openM('mAddStudent');
+  setTimeout(()=>document.getElementById('sName').focus(),180);
+}
+
+function saveStudent() {
+  const name = document.getElementById('sName').value.trim();
+  const subj = document.getElementById('sSubj').value.trim();
+  if (!name) { document.getElementById('eSName').textContent = 'Введите имя'; return; }
+  document.getElementById('eSName').textContent = '';
+  const s = { id:uid(), name, subject:subj, payments:[], lessons:[], createdAt:new Date().toISOString() };
+  db.students.push(s);
+  persist();
+  closeM('mAddStudent');
+  sel = s.id;
+  render();
+}
+
+function openDelStudent(id) {
+  const s = getS(id);
+  pendDel = id;
+  document.getElementById('delStudentText').textContent =
+    `Удалить ученика «${s.name}» и все его записи? Это действие нельзя отменить.`;
+  openM('mDelStudent');
+}
+
+function confirmDelStudent() {
+  db.students = db.students.filter(s=>s.id!==pendDel);
+  if (sel === pendDel) sel = db.students.length ? db.students[0].id : null;
+  pendDel = null;
+  persist();
+  closeM('mDelStudent');
+  render();
+}
+
+// ── Payment ───────────────────────────────────────────
+function openAddPay(id) {
+  sel = id;
+  document.getElementById('pDate').value    = today();
+  document.getElementById('pLessons').value = '';
+  document.getElementById('pNote').value    = '';
+  document.getElementById('ePLessons').textContent = '';
+  openM('mAddPay');
+  setTimeout(()=>document.getElementById('pLessons').focus(),180);
+}
+
+function savePay() {
+  const lessons = parseInt(document.getElementById('pLessons').value);
+  const date    = document.getElementById('pDate').value || today();
+  const note    = document.getElementById('pNote').value.trim();
+  if (!lessons || lessons < 1) {
+    document.getElementById('ePLessons').textContent = 'Введите количество занятий';
+    return;
+  }
+  document.getElementById('ePLessons').textContent = '';
+  const s = getS(sel);
+  if (!s) return;
+  s.payments.push({ id:uid(), date, lessons, note });
+  persist();
+  closeM('mAddPay');
+  render();
+}
+
+// ── Lessons ───────────────────────────────────────────
+function openLesson(id) {
+  sel = id;
+  document.getElementById('lDate').value  = today();
+  document.getElementById('lCount').value = '1';
+  document.getElementById('lNote').value  = '';
+  document.getElementById('eLCount').textContent = '';
+  openM('mLesson');
+  setTimeout(()=>document.getElementById('lNote').focus(),180);
+}
+
+function saveLesson() {
+  const count = parseInt(document.getElementById('lCount').value);
+  const date  = document.getElementById('lDate').value || today();
+  const note  = document.getElementById('lNote').value.trim();
+  if (!count || count < 1) {
+    document.getElementById('eLCount').textContent = 'Введите количество';
+    return;
+  }
+  document.getElementById('eLCount').textContent = '';
+  const s = getS(sel);
+  if (!s) return;
+  if (!s.lessons) s.lessons = [];
+  s.lessons.push({ id:uid(), date, count, note });
+  persist();
+  closeM('mLesson');
+  render();
+}
+
+// ── Delete entry ──────────────────────────────────────
+function delEntry(sid, type, eid) {
+  const s = getS(sid);
+  if (!s) return;
+  if (type === 'pay') s.payments = s.payments.filter(p=>p.id!==eid);
+  else                s.lessons  = (s.lessons||[]).filter(l=>l.id!==eid);
+  persist();
+  render();
+}
+
+// ── Modals ─────────────────────────────────────────────
+function openM(id)  { document.getElementById(id).classList.add('open'); }
+function closeM(id) { document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.backdrop').forEach(el => {
+  el.addEventListener('click', e => { if (e.target === el) closeM(el.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape')
+    ['mAddStudent','mAddPay','mLesson','mDelStudent'].forEach(closeM);
+});
+
+// ── Init ──────────────────────────────────────────────
+document.getElementById('hdrDate').textContent =
+  new Date().toLocaleDateString('ru-RU', {weekday:'long',day:'numeric',month:'long'});
+
+if (db.students.length) sel = db.students[0].id;
+render();
+</script>
+</body>
+</html>
