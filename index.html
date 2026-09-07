@@ -76,6 +76,17 @@
     }
     .app-header h1 { font-size: 16px; font-weight: 600; }
     .app-header .date-label { font-size: 13px; color: var(--muted); margin-left: auto; }
+    .sync-indicator {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      margin-left: 8px;
+      animation: pulse 2s ease infinite;
+    }
+    .sync-indicator.loading { background: var(--warn); animation: spin 1s linear infinite; }
+    .sync-indicator.error { background: var(--danger); animation: none; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ── Layout ── */
     .layout {
@@ -314,18 +325,38 @@
     .modal-hd h3 { font-size: 15px; font-weight: 600; }
     .modal-bd { padding: 18px; }
     .modal-ft { padding: 10px 18px 16px; display: flex; justify-content: flex-end; gap: 8px; }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: fixed; inset: 0;
+      background: oklch(0% 0 0 / .15);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 300;
+      opacity: 0; pointer-events: none;
+      transition: opacity 200ms;
+    }
+    .loading-overlay.show { opacity: 1; pointer-events: auto; }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 4px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
   </style>
 </head>
 <body>
 
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+
 <header class="app-header">
   <span style="font-size:20px" aria-hidden="true">📚</span>
   <h1>Трекер занятий</h1>
+  <div class="sync-indicator" id="syncIndicator" title="Синхронизация"></div>
   <span class="date-label" id="hdrDate"></span>
 </header>
 
 <div class="layout">
-  <!-- Sidebar -->
   <aside>
     <div class="card">
       <div class="card-hd">
@@ -336,7 +367,6 @@
     </div>
   </aside>
 
-  <!-- Detail -->
   <main>
     <div id="detail">
       <div class="detail-ph">
@@ -347,12 +377,12 @@
   </main>
 </div>
 
-<!-- ── Modal: New student ── -->
-<div class="backdrop" id="mAddStudent" role="dialog" aria-modal="true" aria-labelledby="mAddStudentLbl">
+<!-- Modals -->
+<div class="backdrop" id="mAddStudent" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-hd">
-      <h3 id="mAddStudentLbl">Новый ученик</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mAddStudent')" aria-label="Закрыть">✕</button>
+      <h3>Новый ученик</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeM('mAddStudent')">✕</button>
     </div>
     <div class="modal-bd">
       <div class="fg">
@@ -372,12 +402,11 @@
   </div>
 </div>
 
-<!-- ── Modal: Add payment ── -->
-<div class="backdrop" id="mAddPay" role="dialog" aria-modal="true" aria-labelledby="mAddPayLbl">
+<div class="backdrop" id="mAddPay" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-hd">
-      <h3 id="mAddPayLbl">Записать оплату</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mAddPay')" aria-label="Закрыть">✕</button>
+      <h3>Записать оплату</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeM('mAddPay')">✕</button>
     </div>
     <div class="modal-bd">
       <div class="fg">
@@ -401,12 +430,11 @@
   </div>
 </div>
 
-<!-- ── Modal: Mark lesson done ── -->
-<div class="backdrop" id="mLesson" role="dialog" aria-modal="true" aria-labelledby="mLessonLbl">
+<div class="backdrop" id="mLesson" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-hd">
-      <h3 id="mLessonLbl">Занятие прошло</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mLesson')" aria-label="Закрыть">✕</button>
+      <h3>Занятие прошло</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeM('mLesson')">✕</button>
     </div>
     <div class="modal-bd">
       <div class="fg">
@@ -430,12 +458,11 @@
   </div>
 </div>
 
-<!-- ── Modal: Confirm delete student ── -->
-<div class="backdrop" id="mDelStudent" role="dialog" aria-modal="true" aria-labelledby="mDelStudentLbl">
+<div class="backdrop" id="mDelStudent" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-hd">
-      <h3 id="mDelStudentLbl">Удалить ученика?</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mDelStudent')" aria-label="Закрыть">✕</button>
+      <h3>Удалить ученика?</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeM('mDelStudent')">✕</button>
     </div>
     <div class="modal-bd">
       <p id="delStudentText" style="font-size:14px;line-height:1.6"></p>
@@ -447,16 +474,97 @@
   </div>
 </div>
 
-<script>
-// ── Persistence ───────────────────────────────────────
-const KEY = 'tutor_v2';
-function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {students:[]}; } catch { return {students:[]}; } }
-function persist() { localStorage.setItem(KEY, JSON.stringify(db)); }
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://nmexbqjqmwjsdwhuerkw.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tZXhicWpxbXdqc2R3aHVlcmt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODc1MjgsImV4cCI6MjEwNDM2MzUyOH0.ydUjLGVtoEd6P8JIBYMlGicdNXTr4qJNr0BjiP1VEIE';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ── State ─────────────────────────────────────────────
-let db = load();
-let sel = null;        // selected student id
-let pendDel = null;    // student id pending delete
+let students = [];
+let sel = null;
+let pendDel = null;
+
+// ── UI helpers ────────────────────────────────────────
+const syncInd = document.getElementById('syncIndicator');
+const loadingOverlay = document.getElementById('loadingOverlay');
+
+function showLoading() { loadingOverlay.classList.add('show'); }
+function hideLoading() { loadingOverlay.classList.remove('show'); }
+
+function setSyncState(state) {
+  syncInd.className = 'sync-indicator';
+  if (state === 'loading') syncInd.classList.add('loading');
+  if (state === 'error') syncInd.classList.add('error');
+}
+
+// ── DB operations ─────────────────────────────────────
+async function loadStudents() {
+  setSyncState('loading');
+  try {
+    const { data, error } = await supabase.from('students').select('*').order('created_at', { ascending: true });
+    if (error) throw error;
+    students = data || [];
+    setSyncState('ok');
+    return students;
+  } catch (err) {
+    console.error('Load error:', err);
+    setSyncState('error');
+    alert('Ошибка загрузки данных. Проверьте подключение.');
+    return [];
+  }
+}
+
+async function saveStudentDB(student) {
+  setSyncState('loading');
+  try {
+    const { error } = await supabase.from('students').insert([student]);
+    if (error) throw error;
+    students.push(student);
+    setSyncState('ok');
+    return true;
+  } catch (err) {
+    console.error('Save error:', err);
+    setSyncState('error');
+    alert('Ошибка сохранения. Попробуйте ещё раз.');
+    return false;
+  }
+}
+
+async function updateStudentDB(id, updates) {
+  setSyncState('loading');
+  try {
+    const { error } = await supabase.from('students').update(updates).eq('id', id);
+    if (error) throw error;
+    const idx = students.findIndex(s => s.id === id);
+    if (idx !== -1) students[idx] = { ...students[idx], ...updates };
+    setSyncState('ok');
+    return true;
+  } catch (err) {
+    console.error('Update error:', err);
+    setSyncState('error');
+    alert('Ошибка обновления. Попробуйте ещё раз.');
+    return false;
+  }
+}
+
+async function deleteStudentDB(id) {
+  setSyncState('loading');
+  try {
+    const { error } = await supabase.from('students').delete().eq('id', id);
+    if (error) throw error;
+    students = students.filter(s => s.id !== id);
+    setSyncState('ok');
+    return true;
+  } catch (err) {
+    console.error('Delete error:', err);
+    setSyncState('error');
+    alert('Ошибка удаления. Попробуйте ещё раз.');
+    return false;
+  }
+}
 
 // ── Utilities ─────────────────────────────────────────
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
@@ -472,7 +580,7 @@ function esc(s) {
 function initials(name) {
   return name.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join('');
 }
-function getS(id) { return db.students.find(s=>s.id===id); }
+function getS(id) { return students.find(s=>s.id===id); }
 function balance(s) {
   const paid = (s.payments||[]).reduce((a,p)=>a+p.lessons,0);
   const used = (s.lessons ||[]).reduce((a,l)=>a+l.count,0);
@@ -487,11 +595,11 @@ function render() {
 
 function renderList() {
   const el = document.getElementById('studentList');
-  if (!db.students.length) {
+  if (!students.length) {
     el.innerHTML = `<div class="empty-state"><div class="empty-icon">👩‍🎓</div>Нет учеников.<br>Нажмите «+ Добавить».</div>`;
     return;
   }
-  el.innerHTML = db.students.map(s => {
+  el.innerHTML = students.map(s => {
     const bal = balance(s);
     const bc  = bal > 2 ? 'bal-ok' : bal > 0 ? 'bal-warn' : 'bal-zero';
     const active = s.id === sel ? ' active' : '';
@@ -521,7 +629,6 @@ function renderDetail(id) {
   const used = (s.lessons ||[]).reduce((a,l)=>a+l.count,0);
   const bc   = bal > 2 ? 'ok' : bal > 0 ? 'warn' : 'low';
 
-  // merged timeline
   const rows = [
     ...(s.payments||[]).map(p=>({...p,_t:'pay'})),
     ...(s.lessons ||[]).map(l=>({...l,_t:'use'})),
@@ -594,48 +701,59 @@ function renderDetail(id) {
 }
 
 // ── Student CRUD ──────────────────────────────────────
-function selectS(id) { sel = id; render(); }
+window.selectS = function(id) { sel = id; render(); };
 
-function openAddStudent() {
+window.openAddStudent = function() {
   document.getElementById('sName').value  = '';
   document.getElementById('sSubj').value  = '';
   document.getElementById('eSName').textContent = '';
   openM('mAddStudent');
   setTimeout(()=>document.getElementById('sName').focus(),180);
-}
+};
 
-function saveStudent() {
+window.saveStudent = async function() {
   const name = document.getElementById('sName').value.trim();
   const subj = document.getElementById('sSubj').value.trim();
   if (!name) { document.getElementById('eSName').textContent = 'Введите имя'; return; }
   document.getElementById('eSName').textContent = '';
-  const s = { id:uid(), name, subject:subj, payments:[], lessons:[], createdAt:new Date().toISOString() };
-  db.students.push(s);
-  persist();
+  
+  const s = { 
+    id: uid(), 
+    name, 
+    subject: subj, 
+    payments: [], 
+    lessons: [], 
+    created_at: new Date().toISOString() 
+  };
+  
+  const ok = await saveStudentDB(s);
+  if (!ok) return;
+  
   closeM('mAddStudent');
   sel = s.id;
   render();
-}
+};
 
-function openDelStudent(id) {
+window.openDelStudent = function(id) {
   const s = getS(id);
   pendDel = id;
   document.getElementById('delStudentText').textContent =
     `Удалить ученика «${s.name}» и все его записи? Это действие нельзя отменить.`;
   openM('mDelStudent');
-}
+};
 
-function confirmDelStudent() {
-  db.students = db.students.filter(s=>s.id!==pendDel);
-  if (sel === pendDel) sel = db.students.length ? db.students[0].id : null;
+window.confirmDelStudent = async function() {
+  const ok = await deleteStudentDB(pendDel);
+  if (!ok) return;
+  
+  if (sel === pendDel) sel = students.length ? students[0].id : null;
   pendDel = null;
-  persist();
   closeM('mDelStudent');
   render();
-}
+};
 
 // ── Payment ───────────────────────────────────────────
-function openAddPay(id) {
+window.openAddPay = function(id) {
   sel = id;
   document.getElementById('pDate').value    = today();
   document.getElementById('pLessons').value = '';
@@ -643,9 +761,9 @@ function openAddPay(id) {
   document.getElementById('ePLessons').textContent = '';
   openM('mAddPay');
   setTimeout(()=>document.getElementById('pLessons').focus(),180);
-}
+};
 
-function savePay() {
+window.savePay = async function() {
   const lessons = parseInt(document.getElementById('pLessons').value);
   const date    = document.getElementById('pDate').value || today();
   const note    = document.getElementById('pNote').value.trim();
@@ -654,16 +772,20 @@ function savePay() {
     return;
   }
   document.getElementById('ePLessons').textContent = '';
+  
   const s = getS(sel);
   if (!s) return;
-  s.payments.push({ id:uid(), date, lessons, note });
-  persist();
+  
+  const newPayments = [...(s.payments||[]), { id:uid(), date, lessons, note }];
+  const ok = await updateStudentDB(sel, { payments: newPayments });
+  if (!ok) return;
+  
   closeM('mAddPay');
   render();
-}
+};
 
 // ── Lessons ───────────────────────────────────────────
-function openLesson(id) {
+window.openLesson = function(id) {
   sel = id;
   document.getElementById('lDate').value  = today();
   document.getElementById('lCount').value = '1';
@@ -671,9 +793,9 @@ function openLesson(id) {
   document.getElementById('eLCount').textContent = '';
   openM('mLesson');
   setTimeout(()=>document.getElementById('lNote').focus(),180);
-}
+};
 
-function saveLesson() {
+window.saveLesson = async function() {
   const count = parseInt(document.getElementById('lCount').value);
   const date  = document.getElementById('lDate').value || today();
   const note  = document.getElementById('lNote').value.trim();
@@ -682,28 +804,37 @@ function saveLesson() {
     return;
   }
   document.getElementById('eLCount').textContent = '';
+  
   const s = getS(sel);
   if (!s) return;
-  if (!s.lessons) s.lessons = [];
-  s.lessons.push({ id:uid(), date, count, note });
-  persist();
+  
+  const newLessons = [...(s.lessons||[]), { id:uid(), date, count, note }];
+  const ok = await updateStudentDB(sel, { lessons: newLessons });
+  if (!ok) return;
+  
   closeM('mLesson');
   render();
-}
+};
 
 // ── Delete entry ──────────────────────────────────────
-function delEntry(sid, type, eid) {
+window.delEntry = async function(sid, type, eid) {
   const s = getS(sid);
   if (!s) return;
-  if (type === 'pay') s.payments = s.payments.filter(p=>p.id!==eid);
-  else                s.lessons  = (s.lessons||[]).filter(l=>l.id!==eid);
-  persist();
+  
+  const updates = {};
+  if (type === 'pay') updates.payments = s.payments.filter(p=>p.id!==eid);
+  else                updates.lessons  = (s.lessons||[]).filter(l=>l.id!==eid);
+  
+  const ok = await updateStudentDB(sid, updates);
+  if (!ok) return;
+  
   render();
-}
+};
 
-// ── Modals ─────────────────────────────────────────────
+// ── Modals ────────────────────────────────────────────
 function openM(id)  { document.getElementById(id).classList.add('open'); }
 function closeM(id) { document.getElementById(id).classList.remove('open'); }
+window.closeM = closeM;
 
 document.querySelectorAll('.backdrop').forEach(el => {
   el.addEventListener('click', e => { if (e.target === el) closeM(el.id); });
@@ -717,8 +848,13 @@ document.addEventListener('keydown', e => {
 document.getElementById('hdrDate').textContent =
   new Date().toLocaleDateString('ru-RU', {weekday:'long',day:'numeric',month:'long'});
 
-if (db.students.length) sel = db.students[0].id;
-render();
+showLoading();
+loadStudents().then(() => {
+  hideLoading();
+  if (students.length) sel = students[0].id;
+  render();
+});
 </script>
 </body>
 </html>
+
