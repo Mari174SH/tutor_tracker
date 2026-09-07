@@ -662,6 +662,7 @@ function renderDetail(id) {
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:2px">
         <button class="btn btn-primary btn-sm" onclick="openAddPay('${s.id}')">+ Оплата</button>
+        <button class="btn btn-ghost btn-sm" onclick="copyStudentLink('${s.id}','${esc(s.name)}')" title="Скопировать ссылку для ученика">🔗 Ссылка</button>
         <button class="btn btn-danger  btn-sm" style="font-size:12px" onclick="openDelStudent('${s.id}')">Удалить</button>
       </div>
     </div>
@@ -831,6 +832,18 @@ window.delEntry = async function(sid, type, eid) {
   render();
 };
 
+// ── Copy student link ─────────────────────────────────
+window.copyStudentLink = function(id, name) {
+  const baseUrl = window.location.href.replace('index.html', '').replace(/\/$/, '');
+  const link = `${baseUrl}/student-view.html?id=${id}`;
+  
+  navigator.clipboard.writeText(link).then(() => {
+    alert(`Ссылка для ${name} скопирована!\n\nОтправьте её ученику:\n${link}`);
+  }).catch(() => {
+    prompt('Скопируйте эту ссылку и отправьте ученику:', link);
+  });
+};
+
 // ── Modals ────────────────────────────────────────────
 function openM(id)  { document.getElementById(id).classList.add('open'); }
 function closeM(id) { document.getElementById(id).classList.remove('open'); }
@@ -857,4 +870,3 @@ loadStudents().then(() => {
 </script>
 </body>
 </html>
-
