@@ -79,12 +79,18 @@
     .cell.closed { background: repeating-linear-gradient(45deg, transparent, transparent 5px, var(--raised) 5px, var(--raised) 10px); }
     .cell.free { background: var(--success-lt); color: var(--success); font-weight: 600; }
     @media (max-width: 480px) {
-      .cal .cell.free {
+      .cal .cell.free,
+      .cal .cell.mine-top,
+      .cal .cell.mine-mid,
+      .cal .cell.mine-bot {
         font-size: clamp(7px, 1.8vw, 9px);
         padding: 2px 1px;
         line-height: 1.2;
         white-space: normal;
         overflow-wrap: anywhere;
+      }
+      .cal .cell.mine-top span {
+        font-size: clamp(6px, 1.6vw, 8px) !important;
       }
     }
     .cell.mine-top { background: var(--accent-lt); color: var(--accent); font-weight: 700; border-bottom: none !important; border-radius: var(--r) var(--r) 0 0; }
