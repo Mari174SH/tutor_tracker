@@ -6,78 +6,45 @@
   <title>Трекер занятий</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:         oklch(97% 0.005 250);
-      --surface:    oklch(100% 0 0);
-      --raised:     oklch(95% 0.008 250);
-      --border:     oklch(88% 0.010 250);
-      --muted:      oklch(58% 0.015 250);
-      --body:       oklch(20% 0.015 250);
-      --accent:     oklch(56% 0.18  250);
-      --accent-lt:  oklch(94% 0.04  250);
-      --accent-dk:  oklch(44% 0.18  250);
-      --success:    oklch(54% 0.16  150);
-      --success-lt: oklch(94% 0.04  150);
-      --danger:     oklch(52% 0.18   25);
-      --danger-lt:  oklch(95% 0.04   25);
-      --warn:       oklch(62% 0.16   75);
-      --warn-lt:    oklch(96% 0.04   75);
+      --bg: oklch(97% 0.005 250); --surface: oklch(100% 0 0);
+      --raised: oklch(95% 0.008 250); --border: oklch(88% 0.010 250);
+      --muted: oklch(58% 0.015 250); --body: oklch(20% 0.015 250);
+      --accent: oklch(56% 0.18 250); --accent-lt: oklch(94% 0.04 250);
+      --accent-dk: oklch(44% 0.18 250);
+      --success: oklch(54% 0.16 150); --success-lt: oklch(94% 0.04 150);
+      --danger: oklch(52% 0.18 25); --danger-lt: oklch(95% 0.04 25);
+      --warn: oklch(62% 0.16 75); --warn-lt: oklch(96% 0.04 75);
       --r-sm: 6px; --r: 10px; --r-lg: 16px;
       --sh-sm: 0 1px 3px oklch(0% 0 0 / .08);
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg:         oklch(14% 0.010 250);
-        --surface:    oklch(18% 0.012 250);
-        --raised:     oklch(22% 0.012 250);
-        --border:     oklch(30% 0.014 250);
-        --muted:      oklch(60% 0.012 250);
-        --body:       oklch(92% 0.008 250);
-        --accent:     oklch(68% 0.16  250);
-        --accent-lt:  oklch(22% 0.05  250);
-        --accent-dk:  oklch(78% 0.14  250);
-        --success:    oklch(66% 0.14  150);
-        --success-lt: oklch(20% 0.05  150);
-        --danger:     oklch(66% 0.16   25);
-        --danger-lt:  oklch(20% 0.06   25);
-        --warn:       oklch(74% 0.14   75);
-        --warn-lt:    oklch(20% 0.05   75);
+        --bg: oklch(14% 0.010 250); --surface: oklch(18% 0.012 250);
+        --raised: oklch(22% 0.012 250); --border: oklch(30% 0.014 250);
+        --muted: oklch(60% 0.012 250); --body: oklch(92% 0.008 250);
+        --accent: oklch(68% 0.16 250); --accent-lt: oklch(22% 0.05 250);
+        --accent-dk: oklch(78% 0.14 250);
+        --success: oklch(66% 0.14 150); --success-lt: oklch(20% 0.05 150);
+        --danger: oklch(66% 0.16 25); --danger-lt: oklch(20% 0.06 25);
+        --warn: oklch(74% 0.14 75); --warn-lt: oklch(20% 0.05 75);
       }
     }
-
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
     }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--body);
-      font-size: 15px;
-      line-height: 1.6;
-      min-height: 100dvh;
+      background: var(--bg); color: var(--body); font-size: 15px;
+      line-height: 1.6; min-height: 100dvh;
     }
-
-    /* ── Header ── */
     .app-header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 18px;
-      min-height: 52px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      box-shadow: var(--sh-sm);
-      flex-wrap: wrap;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 18px; min-height: 52px; display: flex; align-items: center;
+      gap: 10px; position: sticky; top: 0; z-index: 10; box-shadow: var(--sh-sm); flex-wrap: wrap;
     }
     .app-header h1 { font-size: 16px; font-weight: 600; }
     .app-header .date-label { font-size: 13px; color: var(--muted); margin-left: auto; }
-
     .tabs { display:flex; gap:2px; background: var(--raised); padding:3px; border-radius: 9px; margin-left: 6px; }
     .tab {
       padding: 5px 14px; border-radius: 7px; font-size: 13px; font-weight: 500;
@@ -86,7 +53,6 @@
     }
     .tab.active { background: var(--surface); color: var(--body); box-shadow: var(--sh-sm); }
     .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
     .sync-indicator {
       width: 8px; height: 8px; border-radius: 50%;
       background: var(--success); animation: pulse 2s ease infinite;
@@ -94,69 +60,48 @@
     .sync-indicator.loading { background: var(--warn); animation: none; opacity: .8; }
     .sync-indicator.error { background: var(--danger); animation: none; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-
-    /* ── Layout ── */
     .layout {
-      max-width: 1060px;
-      margin: 0 auto;
-      padding: 20px 16px 72px;
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 20px;
-      align-items: start;
+      max-width: 1060px; margin: 0 auto; padding: 20px 16px 72px;
+      display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: start;
     }
-    @media (max-width: 680px) {
-      .layout { grid-template-columns: 1fr; padding: 14px 12px 72px; }
-    }
-
+    @media (max-width: 680px) { .layout { grid-template-columns: 1fr; padding: 14px 12px 72px; } }
     .cal-wrap { max-width: 1100px; margin: 0 auto; padding: 20px 16px 72px; }
-
-    /* ── Card ── */
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r-lg);
-      box-shadow: var(--sh-sm);
-      overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r-lg); box-shadow: var(--sh-sm); overflow: hidden;
     }
     .card-hd {
-      padding: 14px 18px;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-      flex-wrap: wrap;
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
     }
     .card-hd h2 {
       font-size: 11px; font-weight: 700; text-transform: uppercase;
       letter-spacing: .06em; color: var(--muted);
     }
     .card-bd { padding: 14px 18px; }
-
-    /* ── Buttons ── */
     .btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 7px 14px; border-radius: var(--r-sm);
-      font-size: 14px; font-weight: 500; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 5px; padding: 7px 14px;
+      border-radius: var(--r-sm); font-size: 14px; font-weight: 500; cursor: pointer;
       border: 1px solid transparent; font-family: inherit;
       transition: background 140ms, color 140ms, border-color 140ms;
       white-space: nowrap; line-height: 1;
     }
     .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .btn:disabled { opacity: .4; cursor: not-allowed; }
-    .btn-primary  { background: var(--accent); color: #fff; }
+    .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover:not(:disabled) { background: var(--accent-dk); }
-    .btn-ghost    { background: transparent; color: var(--accent); border-color: var(--border); }
-    .btn-ghost:hover:not(:disabled)   { background: var(--accent-lt); }
-    .btn-danger   { background: transparent; color: var(--danger); border-color: var(--border); }
-    .btn-danger:hover:not(:disabled)  { background: var(--danger-lt); }
-    .btn-sm   { padding: 4px 10px; font-size: 13px; }
+    .btn-ghost { background: transparent; color: var(--accent); border-color: var(--border); }
+    .btn-ghost:hover:not(:disabled) { background: var(--accent-lt); }
+    .btn-danger { background: transparent; color: var(--danger); border-color: var(--border); }
+    .btn-danger:hover:not(:disabled) { background: var(--danger-lt); }
+    .btn-sm { padding: 4px 10px; font-size: 13px; }
     .btn-icon { padding: 5px 7px; }
-
-    /* ── Form ── */
     .fg { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
     .fg:last-child { margin-bottom: 0; }
     label { font-size: 13px; font-weight: 500; }
     .hint { font-size: 12px; color: var(--muted); font-weight: 400; }
-    input[type="text"], input[type="number"], input[type="date"], input[type="time"], select {
+    input[type="text"], input[type="number"], input[type="date"],
+    input[type="time"], select {
       padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--r-sm);
       font-size: 14px; background: var(--raised); color: var(--body);
       width: 100%; font-family: inherit;
@@ -167,13 +112,10 @@
       box-shadow: 0 0 0 3px oklch(56% 0.18 250 / .14);
     }
     .ferr { font-size: 12px; color: var(--danger); min-height: 15px; }
-
-    /* ── Student list ── */
     .s-list { display: flex; flex-direction: column; gap: 1px; padding: 6px; }
     .s-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 10px; border-radius: var(--r);
-      cursor: pointer; transition: background 120ms;
+      display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+      border-radius: var(--r); cursor: pointer; transition: background 120ms;
     }
     .s-item:hover { background: var(--raised); }
     .s-item.active { background: var(--accent-lt); }
@@ -187,23 +129,18 @@
     }
     .s-info { flex: 1; min-width: 0; }
     .s-name { font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .s-sub  { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
+    .s-sub { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .bal {
       font-size: 13px; font-weight: 700; padding: 3px 9px;
       border-radius: 100px; flex-shrink: 0; font-variant-numeric: tabular-nums;
     }
-    .bal-ok   { background: var(--success-lt); color: var(--success); }
-    .bal-warn { background: var(--warn-lt);    color: var(--warn);    }
-    .bal-zero { background: var(--danger-lt);  color: var(--danger);  }
-
+    .bal-ok { background: var(--success-lt); color: var(--success); }
+    .bal-warn { background: var(--warn-lt); color: var(--warn); }
+    .bal-zero { background: var(--danger-lt); color: var(--danger); }
     .empty-state { text-align: center; padding: 32px 16px; color: var(--muted); font-size: 13px; line-height: 1.7; }
-    .empty-icon  { font-size: 30px; margin-bottom: 8px; }
-
+    .empty-icon { font-size: 30px; margin-bottom: 8px; }
     .detail-ph { text-align: center; padding: 72px 24px; color: var(--muted); }
     .detail-ph .icon { font-size: 44px; margin-bottom: 12px; }
-
-    /* ── Stats ── */
     .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 18px; }
     @media (max-width: 440px) { .stats { grid-template-columns: repeat(2,1fr); } }
     .stat {
@@ -212,11 +149,9 @@
     }
     .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
     .stat-val { font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
-    .stat-val.ok   { color: var(--success); }
-    .stat-val.warn { color: var(--warn);    }
-    .stat-val.low  { color: var(--danger);  }
-
-    /* ── Big lesson button ── */
+    .stat-val.ok { color: var(--success); }
+    .stat-val.warn { color: var(--warn); }
+    .stat-val.low { color: var(--danger); }
     .lesson-btn-wrap { margin-bottom: 18px; }
     .lesson-btn {
       width: 100%; padding: 14px; border-radius: var(--r);
@@ -225,16 +160,10 @@
       display: flex; align-items: center; justify-content: center; gap: 8px;
       transition: background 140ms, border-color 140ms, color 140ms;
     }
-    .lesson-btn:hover:not(:disabled) {
-      background: var(--success-lt); border-color: var(--success); color: var(--success);
-    }
+    .lesson-btn:hover:not(:disabled) { background: var(--success-lt); border-color: var(--success); color: var(--success); }
     .lesson-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .lesson-btn.debt { border-color: var(--warn); color: var(--warn); }
-    .lesson-btn.debt:hover:not(:disabled) {
-      background: var(--warn-lt); border-color: var(--warn); color: var(--warn);
-    }
-
-    /* ── Chips ── */
+    .lesson-btn.debt:hover:not(:disabled) { background: var(--warn-lt); border-color: var(--warn); color: var(--warn); }
     .chip {
       display: inline-flex; align-items: center; gap: 6px;
       background: var(--accent-lt); color: var(--accent);
@@ -247,72 +176,84 @@
       border-radius: 100px; line-height: 1;
     }
     .chip-x:hover { opacity: 1; background: oklch(0% 0 0 / .08); }
-
-    /* ── Table ── */
     .tbl-wrap { overflow-x: auto; }
     table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
     table.data thead { background: var(--raised); }
     table.data th {
-      text-align: left; padding: 8px 12px;
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .05em; color: var(--muted);
+      text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .05em; color: var(--muted);
       border-bottom: 1px solid var(--border); white-space: nowrap;
     }
     table.data td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     table.data tr:last-child td { border-bottom: none; }
     table.data tbody tr:hover { background: var(--raised); }
     .mono { font-variant-numeric: tabular-nums; }
-
     .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 100px; }
     .tag-pay { background: var(--success-lt); color: var(--success); }
     .tag-use { background: var(--raised); color: var(--muted); border: 1px solid var(--border); }
 
     /* ── Calendar ── */
-    .cal-nav {
-      display: flex; align-items: center; gap: 8px;
-      margin-bottom: 14px; flex-wrap: wrap;
-    }
+    .cal-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
     .week-label { font-size: 15px; font-weight: 600; min-width: 168px; }
-
     .cal { border-collapse: collapse; width: 100%; font-size: 12px; table-layout: fixed; }
     .cal th, .cal td { border: 1px solid var(--border); }
     .cal thead th { padding: 0; }
     .cal .time-col {
       width: 56px; text-align: center; font-weight: 600; color: var(--muted);
-      background: var(--raised); font-variant-numeric: tabular-nums; font-size: 11px;
+      background: var(--raised); font-variant-numeric: tabular-nums; font-size: 10px;
     }
     .day-head { padding: 7px 3px; text-align: center; background: var(--raised); }
     .day-head .dow { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700; }
     .day-head .dnum { font-size: 15px; font-weight: 700; line-height: 1.25; }
     .day-head.today { background: var(--accent-lt); }
     .day-head.today .dnum, .day-head.today .dow { color: var(--accent); }
-
-    .cell { padding: 3px 4px; vertical-align: top; height: 34px; position: relative; }
-    .cell.clickable { cursor: pointer; }
+    .cell { padding: 2px 4px; vertical-align: top; height: 30px; position: relative; cursor: pointer; }
     .cell.closed {
-      background: repeating-linear-gradient(45deg, transparent, transparent 5px,
-                  var(--raised) 5px, var(--raised) 10px);
+      background: repeating-linear-gradient(45deg, transparent, transparent 5px, var(--raised) 5px, var(--raised) 10px);
       cursor: default;
     }
     .cell.free { background: var(--success-lt); }
-    .cell.clickable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
+    .cell:not(.closed):hover { box-shadow: inset 0 0 0 2px var(--accent); }
     .cell .plus {
       display: flex; align-items: center; justify-content: center;
-      height: 100%; font-size: 14px; color: var(--success);
-      opacity: .4; font-weight: 700;
+      height: 100%; font-size: 13px; color: var(--success); opacity: .4; font-weight: 700;
     }
-    .cell.clickable:hover .plus { opacity: 1; }
-    .cell .who {
-      display: block; font-size: 10px; font-weight: 600; color: var(--accent);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;
+    .cell:not(.closed):hover .plus { opacity: 1; }
+    /* занятая клетка — первая строка занятия */
+    .cell.busy-top {
+      background: var(--accent-lt);
+      border-bottom: none !important;
+      border-radius: var(--r-sm) var(--r-sm) 0 0;
     }
-    .cell .who.exc { color: var(--warn); }
-
+    .cell.busy-top.extra { background: var(--warn-lt); }
+    /* средние строки */
+    .cell.busy-mid {
+      background: var(--accent-lt);
+      border-top: 1px dashed oklch(56% 0.18 250 / .3) !important;
+      border-bottom: none !important;
+    }
+    .cell.busy-mid.extra { background: var(--warn-lt); }
+    /* последняя строка занятия */
+    .cell.busy-bot {
+      background: var(--accent-lt);
+      border-top: 1px dashed oklch(56% 0.18 250 / .3) !important;
+      border-radius: 0 0 var(--r-sm) var(--r-sm);
+    }
+    .cell.busy-bot.extra { background: var(--warn-lt); }
+    .cell.busy-top .who {
+      display: block; font-size: 10px; font-weight: 700;
+      color: var(--accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .cell.busy-top.extra .who { color: var(--warn); }
+    .cell.busy-top .dur {
+      display: block; font-size: 9px; color: var(--muted); line-height: 1;
+    }
     .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 12px; }
     .legend span { display: inline-flex; align-items: center; }
     .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; border: 1px solid var(--border); }
 
     /* Work hours editor */
+    .wh-scroll { max-height: 60dvh; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--r); }
     .wh-table { border-collapse: collapse; width: 100%; font-size: 12px; }
     .wh-table th, .wh-table td { border: 1px solid var(--border); padding: 0; text-align: center; }
     .wh-table th { padding: 6px 2px; font-size: 11px; background: var(--raised); color: var(--muted); position: sticky; top: 0; z-index: 1; }
@@ -320,20 +261,18 @@
     .wh-cell { padding: 3px 2px !important; cursor: pointer; color: transparent; font-weight: 700; user-select: none; font-size: 11px; }
     .wh-cell:hover { background: var(--accent-lt); }
     .wh-cell.on { background: var(--success-lt); color: var(--success); }
-    .wh-scroll { max-height: 62dvh; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--r); }
 
-    /* ── Modal ── */
+    /* Modal */
     .backdrop {
       position: fixed; inset: 0; background: oklch(0% 0 0 / .4);
       display: flex; align-items: center; justify-content: center;
-      z-index: 200; padding: 16px; opacity: 0; pointer-events: none;
-      transition: opacity 180ms;
+      z-index: 200; padding: 16px; opacity: 0; pointer-events: none; transition: opacity 180ms;
     }
     .backdrop.open { opacity: 1; pointer-events: auto; }
     .modal {
       background: var(--surface); border-radius: var(--r-lg);
       box-shadow: 0 8px 32px oklch(0% 0 0 / .20);
-      width: 100%; max-width: 420px; max-height: 90dvh; overflow-y: auto;
+      width: 100%; max-width: 440px; max-height: 90dvh; overflow-y: auto;
       transform: translateY(14px); transition: transform 180ms;
     }
     .backdrop.open .modal { transform: translateY(0); }
@@ -346,8 +285,6 @@
     .modal-bd { padding: 18px; }
     .modal-ft { padding: 10px 18px 16px; display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
     .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
-
-    /* Loading overlay */
     .loading-overlay {
       position: fixed; inset: 0; background: oklch(0% 0 0 / .15);
       display: flex; align-items: center; justify-content: center;
@@ -356,8 +293,7 @@
     .loading-overlay.show { opacity: 1; pointer-events: auto; }
     .spinner {
       width: 40px; height: 40px; border: 4px solid var(--border);
-      border-top-color: var(--accent); border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
@@ -377,7 +313,6 @@
   <span class="date-label" id="hdrDate"></span>
 </header>
 
-<!-- ══ View: Ученики ══ -->
 <div id="viewStudents">
   <div class="layout">
     <aside>
@@ -389,1138 +324,836 @@
         <div class="s-list" id="studentList"></div>
       </div>
     </aside>
-
-    <main>
-      <div id="detail">
-        <div class="detail-ph">
-          <div class="icon">👈</div>
-          <p style="font-size:14px">Выберите ученика слева</p>
-        </div>
-      </div>
-    </main>
+    <main><div id="detail">
+      <div class="detail-ph"><div class="icon">👈</div><p style="font-size:14px">Выберите ученика слева</p></div>
+    </div></main>
   </div>
 </div>
 
-<!-- ══ View: Расписание ══ -->
 <div id="viewCalendar" style="display:none">
   <div class="cal-wrap">
     <div class="cal-nav">
-      <button class="btn btn-ghost btn-sm" onclick="shiftWeek(-1)" aria-label="Предыдущая неделя">←</button>
+      <button class="btn btn-ghost btn-sm" onclick="shiftWeek(-1)">←</button>
       <span class="week-label" id="weekLabel"></span>
-      <button class="btn btn-ghost btn-sm" onclick="shiftWeek(1)" aria-label="Следующая неделя">→</button>
+      <button class="btn btn-ghost btn-sm" onclick="shiftWeek(1)">→</button>
       <button class="btn btn-ghost btn-sm" onclick="goToday()">Сегодня</button>
       <button class="btn btn-ghost btn-sm" onclick="openWorkHours()" style="margin-left:auto">⚙ Рабочие часы</button>
     </div>
-    <div class="card">
-      <div class="tbl-wrap"><table class="cal" id="calTable"></table></div>
-    </div>
+    <div class="card"><div class="tbl-wrap"><table class="cal" id="calTable"></table></div></div>
     <div class="legend">
       <span><i style="background:var(--success-lt)"></i>свободно</span>
-      <span><i style="background:var(--surface);border-color:var(--accent)"></i>занято</span>
-      <span><i style="background:var(--warn-lt);border-color:var(--warn)"></i>разовое изменение</span>
+      <span><i style="background:var(--accent-lt)"></i>постоянное занятие</span>
+      <span><i style="background:var(--warn-lt)"></i>разовое / перенос</span>
       <span><i style="background:var(--raised)"></i>нерабочее время</span>
     </div>
-    <p style="font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6">
-      Нажмите на клетку, чтобы занять свободное окно, открыть нерабочее время
-      или отменить занятие на конкретный день.
+    <p style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6">
+      Нажмите на клетку, чтобы управлять занятием или записать нового ученика.
     </p>
   </div>
 </div>
 
 <!-- ══ Modals ══ -->
-
-<div class="backdrop" id="mAddStudent" role="dialog" aria-modal="true">
-  <div class="modal">
-    <div class="modal-hd">
-      <h3>Новый ученик</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mAddStudent')" aria-label="Закрыть">✕</button>
-    </div>
-    <div class="modal-bd">
-      <div class="fg">
-        <label for="sName">Имя</label>
-        <input type="text" id="sName" placeholder="Аня Смирнова" autocomplete="off" />
-        <span class="ferr" id="eSName"></span>
-      </div>
-      <div class="fg">
-        <label for="sSubj">Предмет <span class="hint">(необязательно)</span></label>
-        <input type="text" id="sSubj" placeholder="Математика, английский…" autocomplete="off" />
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-ghost" onclick="closeM('mAddStudent')">Отмена</button>
-      <button class="btn btn-primary" onclick="saveStudent()">Добавить</button>
-    </div>
+<div class="backdrop" id="mAddStudent" role="dialog" aria-modal="true"><div class="modal">
+  <div class="modal-hd"><h3>Новый ученик</h3><button class="btn btn-icon btn-ghost" onclick="closeM('mAddStudent')">✕</button></div>
+  <div class="modal-bd">
+    <div class="fg"><label for="sName">Имя</label><input type="text" id="sName" placeholder="Аня Смирнова" autocomplete="off"/><span class="ferr" id="eSName"></span></div>
+    <div class="fg"><label for="sSubj">Предмет <span class="hint">(необязательно)</span></label><input type="text" id="sSubj" placeholder="Математика…" autocomplete="off"/></div>
   </div>
-</div>
+  <div class="modal-ft"><button class="btn btn-ghost" onclick="closeM('mAddStudent')">Отмена</button><button class="btn btn-primary" onclick="saveStudent()">Добавить</button></div>
+</div></div>
 
-<div class="backdrop" id="mAddPay" role="dialog" aria-modal="true">
-  <div class="modal">
-    <div class="modal-hd">
-      <h3>Записать оплату</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mAddPay')" aria-label="Закрыть">✕</button>
-    </div>
-    <div class="modal-bd">
-      <div class="fg">
-        <label for="pDate">Дата оплаты</label>
-        <input type="date" id="pDate" />
-      </div>
-      <div class="fg">
-        <label for="pLessons">Количество занятий</label>
-        <input type="number" id="pLessons" placeholder="4" min="1" step="1" />
-        <span class="ferr" id="ePLessons"></span>
-      </div>
-      <div class="fg">
-        <label for="pNote">Заметка <span class="hint">(необязательно)</span></label>
-        <input type="text" id="pNote" placeholder="За апрель, пакет 8 занятий…" />
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-ghost" onclick="closeM('mAddPay')">Отмена</button>
-      <button class="btn btn-primary" onclick="savePay()">Сохранить</button>
-    </div>
+<div class="backdrop" id="mAddPay" role="dialog" aria-modal="true"><div class="modal">
+  <div class="modal-hd"><h3>Записать оплату</h3><button class="btn btn-icon btn-ghost" onclick="closeM('mAddPay')">✕</button></div>
+  <div class="modal-bd">
+    <div class="fg"><label for="pDate">Дата</label><input type="date" id="pDate"/></div>
+    <div class="fg"><label for="pLessons">Количество занятий</label><input type="number" id="pLessons" placeholder="4" min="1" step="1"/><span class="ferr" id="ePLessons"></span></div>
+    <div class="fg"><label for="pNote">Заметка <span class="hint">(необязательно)</span></label><input type="text" id="pNote" placeholder="За апрель…"/></div>
   </div>
-</div>
+  <div class="modal-ft"><button class="btn btn-ghost" onclick="closeM('mAddPay')">Отмена</button><button class="btn btn-primary" onclick="savePay()">Сохранить</button></div>
+</div></div>
 
-<div class="backdrop" id="mLesson" role="dialog" aria-modal="true">
-  <div class="modal">
-    <div class="modal-hd">
-      <h3>Занятие прошло</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mLesson')" aria-label="Закрыть">✕</button>
-    </div>
-    <div class="modal-bd">
-      <div class="fg">
-        <label for="lDate">Дата</label>
-        <input type="date" id="lDate" />
-      </div>
-      <div class="fg">
-        <label for="lCount">Количество занятий <span class="hint">(обычно 1)</span></label>
-        <input type="number" id="lCount" value="1" min="1" step="1" />
-        <span class="ferr" id="eLCount"></span>
-      </div>
-      <div class="fg">
-        <label for="lNote">Тема / заметка <span class="hint">(необязательно)</span></label>
-        <input type="text" id="lNote" placeholder="Тема урока…" />
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-ghost" onclick="closeM('mLesson')">Отмена</button>
-      <button class="btn btn-primary" onclick="saveLesson()">Отметить</button>
-    </div>
+<div class="backdrop" id="mLesson" role="dialog" aria-modal="true"><div class="modal">
+  <div class="modal-hd"><h3>Занятие прошло</h3><button class="btn btn-icon btn-ghost" onclick="closeM('mLesson')">✕</button></div>
+  <div class="modal-bd">
+    <div class="fg"><label for="lDate">Дата</label><input type="date" id="lDate"/></div>
+    <div class="fg"><label for="lCount">Количество занятий <span class="hint">(обычно 1)</span></label><input type="number" id="lCount" value="1" min="1" step="1"/><span class="ferr" id="eLCount"></span></div>
+    <div class="fg"><label for="lNote">Тема / заметка <span class="hint">(необязательно)</span></label><input type="text" id="lNote" placeholder="Тема урока…"/></div>
   </div>
-</div>
+  <div class="modal-ft"><button class="btn btn-ghost" onclick="closeM('mLesson')">Отмена</button><button class="btn btn-primary" onclick="saveLesson()">Отметить</button></div>
+</div></div>
 
-<div class="backdrop" id="mDelStudent" role="dialog" aria-modal="true">
-  <div class="modal">
-    <div class="modal-hd">
-      <h3>Удалить ученика?</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mDelStudent')" aria-label="Закрыть">✕</button>
-    </div>
-    <div class="modal-bd"><p id="delStudentText" style="font-size:14px;line-height:1.6"></p></div>
-    <div class="modal-ft">
-      <button class="btn btn-ghost" onclick="closeM('mDelStudent')">Отмена</button>
-      <button class="btn btn-danger" onclick="confirmDelStudent()">Удалить</button>
-    </div>
-  </div>
-</div>
+<div class="backdrop" id="mDelStudent" role="dialog" aria-modal="true"><div class="modal">
+  <div class="modal-hd"><h3>Удалить ученика?</h3><button class="btn btn-icon btn-ghost" onclick="closeM('mDelStudent')">✕</button></div>
+  <div class="modal-bd"><p id="delStudentText" style="font-size:14px;line-height:1.6"></p></div>
+  <div class="modal-ft"><button class="btn btn-ghost" onclick="closeM('mDelStudent')">Отмена</button><button class="btn btn-danger" onclick="confirmDelStudent()">Удалить</button></div>
+</div></div>
 
-<!-- Постоянное занятие в расписании -->
-<div class="backdrop" id="mAddSlot" role="dialog" aria-modal="true">
-  <div class="modal">
-    <div class="modal-hd">
-      <h3>Занятие в расписании</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mAddSlot')" aria-label="Закрыть">✕</button>
+<!-- Добавить слот в расписание -->
+<div class="backdrop" id="mAddSlot" role="dialog" aria-modal="true"><div class="modal">
+  <div class="modal-hd"><h3>Занятие в расписании</h3><button class="btn btn-icon btn-ghost" onclick="closeM('mAddSlot')">✕</button></div>
+  <div class="modal-bd">
+    <p class="modal-sub">Постоянное занятие — повторяется каждую неделю.</p>
+    <div class="fg"><label for="slotDay">День недели</label><select id="slotDay"></select></div>
+    <div class="fg"><label for="slotTime">Начало</label><select id="slotTime"></select></div>
+    <div class="fg">
+      <label for="slotDur">Длительность</label>
+      <select id="slotDur">
+        <option value="30">30 минут</option>
+        <option value="60" selected>60 минут (1 час)</option>
+        <option value="90">90 минут (1.5 часа)</option>
+        <option value="120">120 минут (2 часа)</option>
+      </select>
     </div>
-    <div class="modal-bd">
-      <p class="modal-sub">Постоянное занятие повторяется каждую неделю в выбранный день.</p>
-      <div class="fg">
-        <label for="slotDay">День недели</label>
-        <select id="slotDay"></select>
-      </div>
-      <div class="fg">
-        <label for="slotTime">Время</label>
-        <select id="slotTime"></select>
-        <span class="ferr" id="eSlot"></span>
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-ghost" onclick="closeM('mAddSlot')">Отмена</button>
-      <button class="btn btn-primary" onclick="saveSlot()">Добавить</button>
-    </div>
+    <span class="ferr" id="eSlot"></span>
   </div>
-</div>
+  <div class="modal-ft"><button class="btn btn-ghost" onclick="closeM('mAddSlot')">Отмена</button><button class="btn btn-primary" onclick="saveSlot()">Добавить</button></div>
+</div></div>
 
 <!-- Клик по занятой клетке -->
-<div class="backdrop" id="mOccupied" role="dialog" aria-modal="true">
-  <div class="modal">
-    <div class="modal-hd">
-      <h3>Занято</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mOccupied')" aria-label="Закрыть">✕</button>
-    </div>
-    <div class="modal-bd">
-      <p class="modal-sub" id="occupiedInfo"></p>
-      <div id="occupiedActions"></div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-ghost" onclick="closeM('mOccupied')">Закрыть</button>
-    </div>
+<div class="backdrop" id="mOccupied" role="dialog" aria-modal="true"><div class="modal">
+  <div class="modal-hd"><h3>Занято</h3><button class="btn btn-icon btn-ghost" onclick="closeM('mOccupied')">✕</button></div>
+  <div class="modal-bd">
+    <p class="modal-sub" id="occupiedInfo"></p>
+    <div id="occupiedActions"></div>
   </div>
-</div>
+  <div class="modal-ft"><button class="btn btn-ghost" onclick="closeM('mOccupied')">Закрыть</button></div>
+</div></div>
 
 <!-- Клик по свободной клетке -->
-<div class="backdrop" id="mBook" role="dialog" aria-modal="true">
-  <div class="modal">
-    <div class="modal-hd">
-      <h3 id="bookModalTitle">Занять окно</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mBook')" aria-label="Закрыть">✕</button>
+<div class="backdrop" id="mBook" role="dialog" aria-modal="true"><div class="modal">
+  <div class="modal-hd"><h3 id="bookTitle">Занять окно</h3><button class="btn btn-icon btn-ghost" onclick="closeM('mBook')">✕</button></div>
+  <div class="modal-bd">
+    <p class="modal-sub" id="bookInfo"></p>
+    <div class="fg"><label for="bookStudent">Ученик</label><select id="bookStudent"></select></div>
+    <div class="fg">
+      <label for="bookDur">Длительность</label>
+      <select id="bookDur">
+        <option value="30">30 минут</option>
+        <option value="60" selected>60 минут</option>
+        <option value="90">90 минут</option>
+        <option value="120">120 минут</option>
+      </select>
     </div>
-    <div class="modal-bd">
-      <p class="modal-sub" id="bookInfo"></p>
-      <div class="fg" id="bookStudentWrap">
-        <label for="bookStudent">Кто занимает</label>
-        <select id="bookStudent"></select>
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-ghost" onclick="closeM('mBook')">Отмена</button>
-      <button class="btn btn-ghost" style="display:none" id="bookRestoreBtn" onclick="restoreLesson()">↩ Вернуть занятие</button>
-      <button class="btn btn-primary" id="bookSaveBtn" onclick="saveBooking()">Занять</button>
-    </div>
+    <span class="ferr" id="eBook"></span>
   </div>
-</div>
+  <div class="modal-ft">
+    <button class="btn btn-ghost" onclick="closeM('mBook')">Отмена</button>
+    <button class="btn btn-ghost" id="bookRestoreBtn" style="display:none" onclick="restoreLesson()">↩ Вернуть</button>
+    <button class="btn btn-primary" id="bookSaveBtn" onclick="saveBooking()">Занять</button>
+  </div>
+</div></div>
 
 <!-- Клик по нерабочей клетке -->
-<div class="backdrop" id="mClosed" role="dialog" aria-modal="true">
-  <div class="modal">
-    <div class="modal-hd">
-      <h3>Нерабочее время</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mClosed')" aria-label="Закрыть">✕</button>
+<div class="backdrop" id="mClosed" role="dialog" aria-modal="true"><div class="modal">
+  <div class="modal-hd"><h3>Нерабочее время</h3><button class="btn btn-icon btn-ghost" onclick="closeM('mClosed')">✕</button></div>
+  <div class="modal-bd">
+    <p class="modal-sub" id="closedInfo"></p>
+    <div class="fg">
+      <label for="closedStudent">Записать занятие <span class="hint">(необязательно)</span></label>
+      <select id="closedStudent"></select>
     </div>
-    <div class="modal-bd">
-      <p class="modal-sub" id="closedInfo"></p>
-      <div class="fg">
-        <label for="closedStudent">Записать разовое занятие <span class="hint">(необязательно)</span></label>
-        <select id="closedStudent"></select>
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-ghost" onclick="closeM('mClosed')">Отмена</button>
-      <button class="btn btn-ghost" onclick="openThisSlot()">Открыть это окно</button>
-      <button class="btn btn-primary" onclick="bookClosedSlot()">Записать занятие</button>
+    <div class="fg">
+      <label for="closedDur">Длительность</label>
+      <select id="closedDur">
+        <option value="30">30 минут</option>
+        <option value="60" selected>60 минут</option>
+        <option value="90">90 минут</option>
+        <option value="120">120 минут</option>
+      </select>
     </div>
   </div>
-</div>
+  <div class="modal-ft">
+    <button class="btn btn-ghost" onclick="closeM('mClosed')">Отмена</button>
+    <button class="btn btn-ghost" onclick="openThisSlot()">Открыть окно</button>
+    <button class="btn btn-primary" onclick="bookClosedSlot()">Записать занятие</button>
+  </div>
+</div></div>
 
 <!-- Перенос -->
-<div class="backdrop" id="mMove" role="dialog" aria-modal="true">
-  <div class="modal">
-    <div class="modal-hd">
-      <h3>Перенести занятие</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mMove')" aria-label="Закрыть">✕</button>
+<div class="backdrop" id="mMove" role="dialog" aria-modal="true"><div class="modal">
+  <div class="modal-hd"><h3>Перенести занятие</h3><button class="btn btn-icon btn-ghost" onclick="closeM('mMove')">✕</button></div>
+  <div class="modal-bd">
+    <p class="modal-sub" id="mvInfo"></p>
+    <div class="fg"><label for="mvDate">Новая дата</label><input type="date" id="mvDate"/></div>
+    <div class="fg"><label for="mvTime">Новое время</label><select id="mvTime"></select></div>
+    <div class="fg">
+      <label for="mvDur">Длительность</label>
+      <select id="mvDur">
+        <option value="30">30 минут</option>
+        <option value="60" selected>60 минут</option>
+        <option value="90">90 минут</option>
+        <option value="120">120 минут</option>
+      </select>
     </div>
-    <div class="modal-bd">
-      <p class="modal-sub" id="mvInfo"></p>
-      <div class="fg">
-        <label for="mvTime">Новое время <span class="hint">(шаг 30 минут)</span></label>
-        <input type="time" id="mvTime" step="1800" />
-        <span class="ferr" id="eMv"></span>
-      </div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-ghost" onclick="closeM('mMove')">Отмена</button>
-      <button class="btn btn-primary" onclick="saveMove()">Перенести</button>
-    </div>
+    <span class="ferr" id="eMv"></span>
   </div>
-</div>
+  <div class="modal-ft">
+    <button class="btn btn-ghost" onclick="closeM('mMove')">Отмена</button>
+    <button class="btn btn-primary" onclick="saveMove()">Перенести</button>
+  </div>
+</div></div>
 
 <!-- Рабочие часы -->
-<div class="backdrop" id="mWorkHours" role="dialog" aria-modal="true">
-  <div class="modal" style="max-width:660px">
-    <div class="modal-hd">
-      <h3>Рабочие часы</h3>
-      <button class="btn btn-icon btn-ghost" onclick="closeM('mWorkHours')" aria-label="Закрыть">✕</button>
-    </div>
-    <div class="modal-bd">
-      <p class="modal-sub">
-        Отметьте получасовые слоты, в которые вы работаете — например 16:30 или 17:00.
-        Изменения сохраняются сразу.
-      </p>
-      <div class="wh-scroll"><table class="wh-table" id="whTable"></table></div>
-    </div>
-    <div class="modal-ft">
-      <button class="btn btn-primary" onclick="closeM('mWorkHours')">Готово</button>
-    </div>
+<div class="backdrop" id="mWorkHours" role="dialog" aria-modal="true"><div class="modal" style="max-width:660px">
+  <div class="modal-hd"><h3>Рабочие часы</h3><button class="btn btn-icon btn-ghost" onclick="closeM('mWorkHours')">✕</button></div>
+  <div class="modal-bd">
+    <p class="modal-sub">Отметьте получасовые слоты, в которые вы проводите занятия. Сохраняется сразу.</p>
+    <div class="wh-scroll"><table class="wh-table" id="whTable"></table></div>
   </div>
-</div>
+  <div class="modal-ft"><button class="btn btn-primary" onclick="closeM('mWorkHours')">Готово</button></div>
+</div></div>
 
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 const SUPABASE_URL = 'https://nmexbqjqmwjsdwhuerkw.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tZXhicWpxbXdqc2R3aHVlcmt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODc1MjgsImV4cCI6MjEwNDM2MzUyOH0.ydUjLGVtoEd6P8JIBYMlGicdNXTr4qJNr0BjiP1VEIE';
-
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ══ Constants ═════════════════════════════════════════
 const DOW_SHORT = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
 const DOW_FULL  = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
 const DOW_ORDER = [1,2,3,4,5,6,0];
 const MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
-
-// Получасовая сетка с 07:00 до 22:30
 const ALL_TIMES = (() => {
   const a = [];
-  for (let h = 7; h <= 22; h++) {
-    a.push(String(h).padStart(2,'0') + ':00');
-    a.push(String(h).padStart(2,'0') + ':30');
-  }
+  for (let h = 7; h <= 22; h++) { a.push(pad(h)+':00'); a.push(pad(h)+':30'); }
   return a;
 })();
 
-// ══ State ═════════════════════════════════════════════
-let students = [];
-let workHours = {};
-let opens = [];
-let sel = null;
-let pendDel = null;
-let weekOffset = 0;
-let ctx = {};
+let students=[], workHours={}, opens=[], sel=null, pendDel=null, weekOffset=0, ctx={};
 
-// ══ UI helpers ════════════════════════════════════════
 const syncInd = document.getElementById('syncIndicator');
 const loadingOverlay = document.getElementById('loadingOverlay');
+function showLoading(){ loadingOverlay.classList.add('show'); }
+function hideLoading(){ loadingOverlay.classList.remove('show'); }
+function setSync(s){ syncInd.className='sync-indicator'; if(s==='loading')syncInd.classList.add('loading'); if(s==='error')syncInd.classList.add('error'); }
 
-function showLoading() { loadingOverlay.classList.add('show'); }
-function hideLoading() { loadingOverlay.classList.remove('show'); }
-function setSync(state) {
-  syncInd.className = 'sync-indicator';
-  if (state === 'loading') syncInd.classList.add('loading');
-  if (state === 'error')   syncInd.classList.add('error');
+function pad(n){ return String(n).padStart(2,'0'); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function isoOf(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function todayISO(){ return isoOf(new Date()); }
+function fmtDate(iso){ if(!iso)return'—'; const[y,m,d]=iso.split('-'); return`${d}.${m}.${y}`; }
+function fmtDateLong(iso){ const d=new Date(iso+'T00:00:00'); return`${DOW_FULL[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]}`; }
+function hmToMin(t){ const p=String(t).split(':'); return(parseInt(p[0])||0)*60+(parseInt(p[1])||0); }
+function minToHM(m){ return pad(Math.floor(m/60))+':'+pad(m%60); }
+function normTime(t){ const m=hmToMin(t); return minToHM(Math.max(0,Math.min(23*60+30,Math.round(m/30)*30))); }
+function hmSort(a,b){ return hmToMin(a)-hmToMin(b); }
+function mondayOf(off){ const d=new Date(); d.setHours(0,0,0,0); const dw=d.getDay(); d.setDate(d.getDate()+(dw===0?-6:1-dw)+off*7); return d; }
+function weekDates(off){ const m=mondayOf(off); return Array.from({length:7},(_,i)=>{ const d=new Date(m); d.setDate(d.getDate()+i); return d; }); }
+function workTimesFor(dow){ const v=workHours[String(dow)]; return Array.isArray(v)?v:[]; }
+function getS(id){ return students.find(s=>s.id===id); }
+function balance(s){ return(s.payments||[]).reduce((a,p)=>a+(p.lessons||0),0)-(s.lessons||[]).reduce((a,l)=>a+(l.count||0),0); }
+function shortName(n){ const p=String(n||'').trim().split(/\s+/); return p.length>1?p[0]+' '+p[1][0]+'.':p[0]||'?'; }
+function initials(n){ return String(n).trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join(''); }
+function durText(min){ return min<60?min+' мин':(min===60?'1 ч':(min%60===0?min/60+' ч':Math.floor(min/60)+' ч '+min%60+' мин')); }
+
+// Slots occupied by a lesson: array of time strings covered
+function slotsCovered(startTime, durMin){
+  const start = hmToMin(startTime);
+  const out=[];
+  for(let m=start; m<start+durMin; m+=30) out.push(minToHM(m));
+  return out;
 }
 
-// ══ Utilities ═════════════════════════════════════════
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
-function esc(s) {
-  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function isoOf(d) {
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-function todayISO() { return isoOf(new Date()); }
-function fmtDate(iso) {
-  if (!iso) return '—';
-  const [y,m,d] = iso.split('-');
-  return `${d}.${m}.${y}`;
-}
-function fmtDateLong(iso) {
-  const d = new Date(iso + 'T00:00:00');
-  return `${DOW_FULL[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]}`;
-}
-function mondayOf(off) {
-  const d = new Date();
-  d.setHours(0,0,0,0);
-  const dow = d.getDay();
-  d.setDate(d.getDate() + (dow === 0 ? -6 : 1 - dow) + off * 7);
-  return d;
-}
-function weekDates(off) {
-  const m = mondayOf(off);
-  return Array.from({length:7}, (_,i) => {
-    const d = new Date(m);
-    d.setDate(d.getDate() + i);
-    return d;
+// All occupied (date,time) pairs across all students
+function occupancyMap(dates){
+  // returns Map<"date|time" -> {sid, kind, oid, pairId, movedFrom, durMin}>
+  const map = new Map();
+  function put(date,time,info){
+    const k=date+'|'+time;
+    if(!map.has(k)) map.set(k,info);
+  }
+  const dateSet = new Set(dates.map(isoOf));
+  students.forEach(s=>{
+    // Постоянные слоты
+    (s.schedule||[]).forEach(sl=>{
+      dates.forEach(d=>{
+        if(d.getDay()===Number(sl.dow)){
+          const date=isoOf(d);
+          const cancelled=(s.overrides||[]).some(o=>o.date===date&&o.time===sl.time&&o.type==='cancel');
+          if(!cancelled){
+            slotsCovered(sl.time,sl.durMin||60).forEach(t=>{
+              put(date,t,{sid:s.id,kind:'regular',oid:null,pairId:null,movedFrom:null,durMin:sl.durMin||60,startTime:sl.time});
+            });
+          }
+        }
+      });
+    });
+    // Разовые / переносы
+    (s.overrides||[]).forEach(o=>{
+      if(o.type==='extra' && dateSet.has(o.date)){
+        slotsCovered(o.time,o.durMin||60).forEach(t=>{
+          put(o.date,t,{sid:s.id,kind:'extra',oid:o.id,pairId:o.pairId||null,movedFrom:o.movedFrom||null,durMin:o.durMin||60,startTime:o.time});
+        });
+      }
+    });
   });
-}
-function hmToMin(t) {
-  const p = String(t).split(':');
-  return (parseInt(p[0])||0) * 60 + (parseInt(p[1])||0);
-}
-function minToHM(m) {
-  return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0');
-}
-function normTime(t) {
-  // приводит "16:30" / "16:00" к сетке 30 минут
-  const m = hmToMin(t);
-  const snapped = Math.round(m / 30) * 30;
-  return minToHM(Math.max(0, Math.min(23*60+30, snapped)));
-}
-function getS(id) { return students.find(s => s.id === id); }
-function balance(s) {
-  const paid = (s.payments || []).reduce((a,p) => a + (p.lessons||0), 0);
-  const used = (s.lessons  || []).reduce((a,l) => a + (l.count||0), 0);
-  return paid - used;
-}
-function shortName(n) {
-  const p = String(n||'').trim().split(/\s+/);
-  if (p.length > 1) return p[0] + ' ' + p[1][0] + '.';
-  return p[0] || '?';
-}
-function initials(name) {
-  return String(name).trim().split(/\s+/).slice(0,2).map(w => w[0].toUpperCase()).join('');
-}
-function workTimesFor(dow) {
-  const v = workHours[String(dow)];
-  return Array.isArray(v) ? v : [];
-}
-function hmSort(a, b) { return hmToMin(a) - hmToMin(b); }
-
-// ══ DB ════════════════════════════════════════════════
-async function insertStudent(s) {
-  setSync('loading');
-  try {
-    const { error } = await supabase.from('students').insert([s]);
-    if (error) throw error;
-    students.push(s);
-    setSync('ok');
-    return true;
-  } catch (e) { console.error(e); setSync('error'); alert('Ошибка сохранения. Попробуйте ещё раз.'); return false; }
-}
-async function updateStudent(id, updates) {
-  setSync('loading');
-  try {
-    const { error } = await supabase.from('students').update(updates).eq('id', id);
-    if (error) throw error;
-    const i = students.findIndex(s => s.id === id);
-    if (i !== -1) students[i] = { ...students[i], ...updates };
-    setSync('ok');
-    return true;
-  } catch (e) { console.error(e); setSync('error'); alert('Ошибка сохранения. Попробуйте ещё раз.'); return false; }
-}
-async function deleteStudent(id) {
-  setSync('loading');
-  try {
-    const { error } = await supabase.from('students').delete().eq('id', id);
-    if (error) throw error;
-    students = students.filter(s => s.id !== id);
-    setSync('ok');
-    return true;
-  } catch (e) { console.error(e); setSync('error'); alert('Ошибка удаления. Попробуйте ещё раз.'); return false; }
-}
-async function saveSetting(key, value) {
-  setSync('loading');
-  try {
-    const { error } = await supabase.from('settings').upsert({ key, value });
-    if (error) throw error;
-    setSync('ok');
-    return true;
-  } catch (e) { console.error(e); setSync('error'); alert('Не удалось сохранить настройки.'); return false; }
+  return map;
 }
 
-// ══ Views ═════════════════════════════════════════════
-window.showView = function(name) {
-  document.getElementById('viewStudents').style.display = name === 'students' ? '' : 'none';
-  document.getElementById('viewCalendar').style.display = name === 'calendar' ? '' : 'none';
-  document.getElementById('tabStudents').classList.toggle('active', name === 'students');
-  document.getElementById('tabCalendar').classList.toggle('active', name === 'calendar');
-  if (name === 'calendar') renderCalendar();
+// ── DB ────────────────────────────────────────────────
+async function insertStudent(s){ setSync('loading'); try{ const{error}=await supabase.from('students').insert([s]); if(error)throw error; students.push(s); setSync('ok'); return true; }catch(e){ console.error(e); setSync('error'); alert('Ошибка сохранения.'); return false; } }
+async function updateStudent(id,up){ setSync('loading'); try{ const{error}=await supabase.from('students').update(up).eq('id',id); if(error)throw error; const i=students.findIndex(s=>s.id===id); if(i!==-1)students[i]={...students[i],...up}; setSync('ok'); return true; }catch(e){ console.error(e); setSync('error'); alert('Ошибка сохранения.'); return false; } }
+async function deleteStudent(id){ setSync('loading'); try{ const{error}=await supabase.from('students').delete().eq('id',id); if(error)throw error; students=students.filter(s=>s.id!==id); setSync('ok'); return true; }catch(e){ console.error(e); setSync('error'); alert('Ошибка удаления.'); return false; } }
+async function saveSetting(key,value){ setSync('loading'); try{ const{error}=await supabase.from('settings').upsert({key,value}); if(error)throw error; setSync('ok'); return true; }catch(e){ console.error(e); setSync('error'); return false; } }
+
+// ── Views ─────────────────────────────────────────────
+window.showView=function(name){
+  document.getElementById('viewStudents').style.display=name==='students'?'':'none';
+  document.getElementById('viewCalendar').style.display=name==='calendar'?'':'none';
+  document.getElementById('tabStudents').classList.toggle('active',name==='students');
+  document.getElementById('tabCalendar').classList.toggle('active',name==='calendar');
+  if(name==='calendar')renderCalendar();
 };
 
-// ══ Render: students ══════════════════════════════════
-function render() {
-  renderList();
-  sel ? renderDetail(sel) : renderPlaceholder();
-}
+// ── Render: list ──────────────────────────────────────
+function render(){ renderList(); sel?renderDetail(sel):renderPlaceholder(); }
 
-function renderList() {
-  const el = document.getElementById('studentList');
-  if (!students.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">👩‍🎓</div>Нет учеников.<br>Нажмите «+ Добавить».</div>`;
-    return;
-  }
-  el.innerHTML = students.map(s => {
-    const bal = balance(s);
-    const bc  = bal > 2 ? 'bal-ok' : bal > 0 ? 'bal-warn' : 'bal-zero';
-    const sub = scheduleText(s) || s.subject || '';
-    return `<div class="s-item${s.id === sel ? ' active' : ''}" tabindex="0" role="button"
-        onclick="selectS('${s.id}')" onkeydown="if(event.key==='Enter'||event.key===' ')selectS('${s.id}')">
+function renderList(){
+  const el=document.getElementById('studentList');
+  if(!students.length){ el.innerHTML=`<div class="empty-state"><div class="empty-icon">👩‍🎓</div>Нет учеников.<br>Нажмите «+ Добавить».</div>`; return; }
+  el.innerHTML=students.map(s=>{
+    const bal=balance(s);
+    const bc=bal>2?'bal-ok':bal>0?'bal-warn':'bal-zero';
+    const sub=scheduleText(s)||s.subject||'';
+    return`<div class="s-item${s.id===sel?' active':''}" tabindex="0" role="button"
+      onclick="selectS('${s.id}')" onkeydown="if(event.key==='Enter'||event.key===' ')selectS('${s.id}')">
       <div class="s-avatar">${esc(initials(s.name))}</div>
-      <div class="s-info">
-        <div class="s-name">${esc(s.name)}</div>
-        <div class="s-sub">${sub ? esc(sub) : '—'}</div>
-      </div>
-      <span class="bal ${bc}">${bal}</span>
-    </div>`;
+      <div class="s-info"><div class="s-name">${esc(s.name)}</div><div class="s-sub">${sub?esc(sub):'—'}</div></div>
+      <span class="bal ${bc}">${bal}</span></div>`;
   }).join('');
 }
 
-function scheduleText(s) {
-  if (!s.schedule || !s.schedule.length) return '';
-  return [...s.schedule]
-    .sort((a,b) => (a.dow === 0 ? 7 : a.dow) - (b.dow === 0 ? 7 : b.dow) || hmToMin(a.time) - hmToMin(b.time))
-    .map(sl => `${DOW_SHORT[sl.dow]} ${sl.time}`)
+function scheduleText(s){
+  if(!s.schedule||!s.schedule.length)return'';
+  return[...s.schedule]
+    .sort((a,b)=>(a.dow===0?7:a.dow)-(b.dow===0?7:b.dow)||hmToMin(a.time)-hmToMin(b.time))
+    .map(sl=>`${DOW_SHORT[sl.dow]} ${sl.time} (${durText(sl.durMin||60)})`)
     .join(', ');
 }
 
-function renderPlaceholder() {
-  document.getElementById('detail').innerHTML =
-    `<div class="detail-ph"><div class="icon">👈</div><p style="font-size:14px">Выберите ученика слева</p></div>`;
-}
+function renderPlaceholder(){ document.getElementById('detail').innerHTML=`<div class="detail-ph"><div class="icon">👈</div><p style="font-size:14px">Выберите ученика слева</p></div>`; }
 
-function renderDetail(id) {
-  const s = getS(id);
-  if (!s) { renderPlaceholder(); return; }
+function renderDetail(id){
+  const s=getS(id); if(!s){ renderPlaceholder(); return; }
+  const bal=balance(s);
+  const paid=(s.payments||[]).reduce((a,p)=>a+(p.lessons||0),0);
+  const used=(s.lessons||[]).reduce((a,l)=>a+(l.count||0),0);
+  const bc=bal>2?'ok':bal>0?'warn':'low';
+  const slots=[...(s.schedule||[])].sort((a,b)=>(a.dow===0?7:a.dow)-(b.dow===0?7:b.dow)||hmToMin(a.time)-hmToMin(b.time));
+  const chips=slots.length
+    ?slots.map(sl=>`<span class="chip">${DOW_SHORT[sl.dow]} ${sl.time} · ${durText(sl.durMin||60)}<button class="chip-x" onclick="removeSlot('${s.id}','${sl.id}')">✕</button></span>`).join('')
+    :`<span style="font-size:13px;color:var(--muted)">Пока не задано</span>`;
+  const rows=[...(s.payments||[]).map(p=>({...p,_t:'pay'})),...(s.lessons||[]).map(l=>({...l,_t:'use'}))].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const tBody=rows.length?rows.map(r=>{
+    if(r._t==='pay')return`<tr><td>${fmtDate(r.date)}</td><td><span class="tag tag-pay">Оплата</span></td><td class="mono" style="color:var(--success);font-weight:600">+${r.lessons} зан.</td><td style="color:var(--muted)">${r.note?esc(r.note):'—'}</td><td><button class="btn btn-icon btn-danger btn-sm" onclick="delEntry('${s.id}','pay','${r.id}')">✕</button></td></tr>`;
+    return`<tr><td>${fmtDate(r.date)}</td><td><span class="tag tag-use">Занятие</span></td><td class="mono" style="color:var(--muted)">−${r.count} зан.</td><td style="color:var(--muted)">${r.note?esc(r.note):'—'}</td><td><button class="btn btn-icon btn-danger btn-sm" onclick="delEntry('${s.id}','use','${r.id}')">✕</button></td></tr>`;
+  }).join(''):`<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;font-size:13px">Записей пока нет</td></tr>`;
 
-  const bal  = balance(s);
-  const paid = (s.payments||[]).reduce((a,p) => a + (p.lessons||0), 0);
-  const used = (s.lessons ||[]).reduce((a,l) => a + (l.count||0), 0);
-  const bc   = bal > 2 ? 'ok' : bal > 0 ? 'warn' : 'low';
-
-  const slots = [...(s.schedule||[])]
-    .sort((a,b) => (a.dow === 0 ? 7 : a.dow) - (b.dow === 0 ? 7 : b.dow) || hmToMin(a.time) - hmToMin(b.time));
-
-  const chips = slots.length
-    ? slots.map(sl => `<span class="chip">${DOW_SHORT[sl.dow]} ${sl.time}
-        <button class="chip-x" onclick="removeSlot('${s.id}','${sl.id}')" title="Убрать из расписания">✕</button></span>`).join('')
-    : `<span style="font-size:13px;color:var(--muted)">Пока не задано</span>`;
-
-  const rows = [
-    ...(s.payments||[]).map(p => ({...p, _t:'pay'})),
-    ...(s.lessons ||[]).map(l => ({...l, _t:'use'})),
-  ].sort((a,b) => (b.date||'').localeCompare(a.date||''));
-
-  const tBody = rows.length ? rows.map(r => {
-    if (r._t === 'pay') {
-      return `<tr>
-        <td>${fmtDate(r.date)}</td>
-        <td><span class="tag tag-pay">Оплата</span></td>
-        <td class="mono" style="color:var(--success);font-weight:600">+${r.lessons} зан.</td>
-        <td style="color:var(--muted)">${r.note ? esc(r.note) : '—'}</td>
-        <td><button class="btn btn-icon btn-danger btn-sm" onclick="delEntry('${s.id}','pay','${r.id}')" aria-label="Удалить">✕</button></td>
-      </tr>`;
-    }
-    return `<tr>
-      <td>${fmtDate(r.date)}</td>
-      <td><span class="tag tag-use">Занятие</span></td>
-      <td class="mono" style="color:var(--muted)">−${r.count} зан.</td>
-      <td style="color:var(--muted)">${r.note ? esc(r.note) : '—'}</td>
-      <td><button class="btn btn-icon btn-danger btn-sm" onclick="delEntry('${s.id}','use','${r.id}')" aria-label="Удалить">✕</button></td>
-    </tr>`;
-  }).join('') : `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;font-size:13px">Записей пока нет</td></tr>`;
-
-  document.getElementById('detail').innerHTML = `
+  document.getElementById('detail').innerHTML=`
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap">
-      <div>
-        <div style="font-size:20px;font-weight:700;line-height:1.2">${esc(s.name)}</div>
-        ${s.subject ? `<div style="font-size:13px;color:var(--muted);margin-top:3px">${esc(s.subject)}</div>` : ''}
-      </div>
+      <div><div style="font-size:20px;font-weight:700;line-height:1.2">${esc(s.name)}</div>${s.subject?`<div style="font-size:13px;color:var(--muted);margin-top:3px">${esc(s.subject)}</div>`:''}</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:2px">
         <button class="btn btn-primary btn-sm" onclick="openAddPay('${s.id}')">+ Оплата</button>
-        <button class="btn btn-ghost btn-sm" onclick="copyStudentLink('${s.id}')" title="Скопировать ссылку для ученика">🔗 Ссылка</button>
+        <button class="btn btn-ghost btn-sm" onclick="copyStudentLink('${s.id}')">🔗 Ссылка</button>
         <button class="btn btn-danger btn-sm" onclick="openDelStudent('${s.id}')">Удалить</button>
       </div>
     </div>
-
     <div class="stats">
       <div class="stat"><div class="stat-lbl">Остаток</div><div class="stat-val ${bc}">${bal}</div></div>
       <div class="stat"><div class="stat-lbl">Оплачено</div><div class="stat-val">${paid}</div></div>
       <div class="stat"><div class="stat-lbl">Проведено</div><div class="stat-val">${used}</div></div>
     </div>
-
     <div class="lesson-btn-wrap">
-      <button class="lesson-btn${bal < 0 ? ' debt' : ''}" onclick="openLesson('${s.id}')">
-        <span style="font-size:18px">${bal < 0 ? '⚠️' : '✅'}</span>
-        Занятие прошло${bal < 0 ? ' (долг: ' + Math.abs(bal) + ' зан.)' : bal === 0 ? ' (баланс 0)' : ''}
+      <button class="lesson-btn${bal<0?' debt':''}" onclick="openLesson('${s.id}')">
+        <span style="font-size:18px">${bal<0?'⚠️':'✅'}</span>
+        Занятие прошло${bal<0?' (долг: '+Math.abs(bal)+' зан.)':bal===0?' (баланс 0)':''}
       </button>
     </div>
-
     <div class="card" style="margin-bottom:18px">
-      <div class="card-hd">
-        <h2>Расписание</h2>
-        <button class="btn btn-ghost btn-sm" onclick="openAddSlot('${s.id}')">+ Добавить</button>
-      </div>
+      <div class="card-hd"><h2>Расписание</h2><button class="btn btn-ghost btn-sm" onclick="openAddSlot('${s.id}')">+ Добавить</button></div>
       <div class="card-bd">${chips}</div>
     </div>
-
     <div class="card">
       <div class="card-hd"><h2>История</h2></div>
-      <div class="tbl-wrap">
-        <table class="data">
-          <thead><tr><th>Дата</th><th>Тип</th><th>Занятия</th><th>Заметка</th><th></th></tr></thead>
-          <tbody>${tBody}</tbody>
-        </table>
-      </div>
-    </div>
-  `;
+      <div class="tbl-wrap"><table class="data"><thead><tr><th>Дата</th><th>Тип</th><th>Занятия</th><th>Заметка</th><th></th></tr></thead><tbody>${tBody}</tbody></table></div>
+    </div>`;
 }
 
-// ══ Calendar ══════════════════════════════════════════
-function overridesForDate(date) {
-  const out = [];
-  students.forEach(s => {
-    (s.overrides || []).forEach(o => { if (o.date === date) out.push({ s, o }); });
+// ── Calendar ──────────────────────────────────────────
+function weekTimes(dates){
+  const set=new Set();
+  dates.forEach(d=>workTimesFor(d.getDay()).forEach(t=>set.add(t)));
+  opens.forEach(o=>{ if(dates.some(d=>isoOf(d)===o.date))set.add(o.time); });
+  students.forEach(s=>{
+    (s.schedule||[]).forEach(sl=>slotsCovered(sl.time,sl.durMin||60).forEach(t=>set.add(t)));
+    (s.overrides||[]).forEach(o=>{ if(dates.some(d=>isoOf(d)===o.date))slotsCovered(o.time,o.durMin||60).forEach(t=>set.add(t)); });
   });
-  return out;
+  return[...set].sort(hmSort);
 }
 
-function buildCell(dateObj, time) {
-  const dow  = dateObj.getDay();
-  const date = isoOf(dateObj);
-  const ovs  = overridesForDate(date).filter(x => x.o.time === time);
-  const cancels = ovs.filter(x => x.o.type === 'cancel');
-  const extras  = ovs.filter(x => x.o.type === 'extra');
-  const openHere = ovs.some(x => x.o.type === 'open') ||
-                   opens.some(o => o.date === date && o.time === time);
-  const working  = workTimesFor(dow).includes(time);
+function renderCalendar(){
+  const el=document.getElementById('calTable'); if(!el)return;
+  const dates=weekDates(weekOffset);
+  const times=weekTimes(dates);
+  const oMap=occupancyMap(dates);
+  const mon=dates[0],sun=dates[6];
+  const label=mon.getMonth()===sun.getMonth()
+    ?`${mon.getDate()} — ${sun.getDate()} ${MONTHS[sun.getMonth()]} ${sun.getFullYear()}`
+    :`${mon.getDate()} ${MONTHS[mon.getMonth()]} — ${sun.getDate()} ${MONTHS[sun.getMonth()]} ${sun.getFullYear()}`;
+  document.getElementById('weekLabel').textContent=label;
 
-  let lesson = null;
-  if (extras.length) {
-    lesson = {
-      sid: extras[0].s.id, kind: 'extra',
-      oid: extras[0].o.id,
-      pairId: extras[0].o.pairId || null,
-      movedFrom: extras[0].o.movedFrom || null,
-    };
+  const todayIso=todayISO();
+  let html='<thead><tr><th class="time-col"></th>';
+  dates.forEach(d=>{
+    const isToday=isoOf(d)===todayIso;
+    html+=`<th class="day-head${isToday?' today':''}"><div class="dow">${DOW_SHORT[d.getDay()]}</div><div class="dnum">${d.getDate()}</div></th>`;
+  });
+  html+='</tr></thead><tbody>';
+
+  if(!times.length){
+    html+=`<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:36px;font-size:14px">Рабочие часы не заданы.<br>Нажмите «⚙ Рабочие часы».</td></tr>`;
   } else {
-    const reg = students.find(s =>
-      (s.schedule || []).some(sl => Number(sl.dow) === dow && sl.time === time));
-    if (reg && !cancels.some(c => c.s.id === reg.id)) {
-      lesson = { sid: reg.id, kind: 'regular', oid: null, pairId: null, movedFrom: null };
-    }
-  }
-
-  let cancel = null;
-  if (cancels.length && !lesson) {
-    cancel = { sid: cancels[0].s.id, oid: cancels[0].o.id, pairId: cancels[0].o.pairId || null };
-  }
-
-  return { date, time, dow, available: working || openHere, lesson, cancel };
-}
-
-function weekTimes(dates) {
-  const set = new Set();
-  dates.forEach(d => workTimesFor(d.getDay()).forEach(t => set.add(t)));
-  opens.forEach(o => { if (dates.some(d => isoOf(d) === o.date)) set.add(o.time); });
-  students.forEach(s => {
-    (s.schedule || []).forEach(sl => set.add(sl.time));
-    (s.overrides || []).forEach(o => {
-      if (dates.some(d => isoOf(d) === o.date)) set.add(o.time);
-    });
-  });
-  return [...set].sort(hmSort);
-}
-
-function renderCalendar() {
-  const el = document.getElementById('calTable');
-  if (!el) return;
-
-  const dates = weekDates(weekOffset);
-  const times = weekTimes(dates);
-  const mon = dates[0], sun = dates[6];
-  const label = mon.getMonth() === sun.getMonth()
-    ? `${mon.getDate()} — ${sun.getDate()} ${MONTHS[sun.getMonth()]} ${sun.getFullYear()}`
-    : `${mon.getDate()} ${MONTHS[mon.getMonth()]} — ${sun.getDate()} ${MONTHS[sun.getMonth()]} ${sun.getFullYear()}`;
-  document.getElementById('weekLabel').textContent = label;
-
-  const todayIso = todayISO();
-  let html = '<thead><tr><th class="time-col"></th>';
-  dates.forEach(d => {
-    const isToday = isoOf(d) === todayIso;
-    html += `<th class="day-head${isToday ? ' today' : ''}">
-      <div class="dow">${DOW_SHORT[d.getDay()]}</div>
-      <div class="dnum">${d.getDate()}</div>
-    </th>`;
-  });
-  html += '</tr></thead><tbody>';
-
-  if (!times.length) {
-    html += `<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:36px;font-size:14px">
-      Рабочие часы не заданы.<br>Нажмите «⚙ Рабочие часы», чтобы настроить сетку.</td></tr>`;
-  } else {
-    times.forEach(t => {
-      html += `<tr><td class="time-col">${t}</td>`;
-      dates.forEach(d => {
-        const c = buildCell(d, t);
-        let cls = 'cell clickable';
-        let inner = '';
-        if (c.lesson) {
-          const st = getS(c.lesson.sid);
-          if (c.lesson.kind === 'extra') cls += ' busy exc';
-          inner = `<span class="who${c.lesson.kind === 'extra' ? ' exc' : ''}">${esc(shortName(st ? st.name : '?'))}</span>`;
-        } else if (c.cancel) {
-          cls += ' free';
-          inner = `<span class="plus">+</span>`;
-        } else if (c.available) {
-          cls += ' free';
-          inner = `<span class="plus">+</span>`;
+    times.forEach(t=>{
+      html+=`<tr><td class="time-col">${t}</td>`;
+      dates.forEach(d=>{
+        const date=isoOf(d);
+        const key=date+'|'+t;
+        const info=oMap.get(key);
+        if(info){
+          const isStart=info.startTime===t;
+          const slots=slotsCovered(info.startTime,info.durMin);
+          const idx=slots.indexOf(t);
+          const isEnd=idx===slots.length-1;
+          const cls='cell'+(isStart?' busy-top':isEnd?' busy-bot':' busy-mid')+(info.kind==='extra'?' extra':'');
+          const content=isStart
+            ?`<span class="who">${esc(shortName(getS(info.sid)?.name||'?'))}</span><span class="dur">${durText(info.durMin)}</span>`
+            :'';
+          html+=`<td class="${cls}" data-d="${date}" data-t="${info.startTime}" onclick="cellClick(this)">${content}</td>`;
         } else {
-          cls += ' closed';
+          const working=workTimesFor(d.getDay()).includes(t)||opens.some(o=>o.date===date&&o.time===t);
+          const cancelled=students.some(s=>(s.overrides||[]).some(o=>o.date===date&&o.time===t&&o.type==='cancel'));
+          if(working||cancelled){
+            html+=`<td class="cell free" data-d="${date}" data-t="${t}" onclick="cellClick(this)"><span class="plus">+</span></td>`;
+          } else {
+            html+=`<td class="cell closed" data-d="${date}" data-t="${t}" onclick="cellClick(this)"></td>`;
+          }
         }
-        html += `<td class="${cls}" data-d="${c.date}" data-t="${t}" onclick="cellClick(this)">${inner}</td>`;
       });
-      html += '</tr>';
+      html+='</tr>';
     });
   }
-  html += '</tbody>';
-  el.innerHTML = html;
+  html+='</tbody>';
+  el.innerHTML=html;
 }
 
-window.shiftWeek = function(n) { weekOffset += n; renderCalendar(); };
-window.goToday  = function() { weekOffset = 0; renderCalendar(); };
+window.shiftWeek=function(n){ weekOffset+=n; renderCalendar(); };
+window.goToday=function(){ weekOffset=0; renderCalendar(); };
 
-// ══ Cell clicks ═══════════════════════════════════════
-window.cellClick = function(el) {
-  const date = el.dataset.d, time = el.dataset.t;
-  const c = buildCell(new Date(date + 'T00:00:00'), time);
-  if (c.lesson)    return openOccupied(c);
-  if (c.cancel)    return openFreed(c);
-  if (c.available) return openBook(c);
-  return openClosed(c);
+// ── Cell clicks ───────────────────────────────────────
+window.cellClick=function(el){
+  const date=el.dataset.d, time=el.dataset.t;
+  const key=date+'|'+time;
+  const dates=weekDates(weekOffset);
+  const oMap=occupancyMap(dates);
+  const info=oMap.get(key);
+  const d=new Date(date+'T00:00:00');
+  const dow=d.getDay();
+
+  if(info) return openOccupied(date,time,info);
+
+  const working=workTimesFor(dow).includes(time)||opens.some(o=>o.date===date&&o.time===time);
+  const cancelInfo=students.flatMap(s=>(s.overrides||[]).filter(o=>o.date===date&&o.time===time&&o.type==='cancel').map(o=>({s,o}))).shift();
+  if(working||cancelInfo) return openBook(date,time,cancelInfo||null);
+  return openClosed(date,time);
 };
 
-function studentOptions(selected) {
-  return students.map(s =>
-    `<option value="${s.id}"${s.id === selected ? ' selected' : ''}>${esc(s.name)}</option>`).join('');
+function sOpts(selected){
+  return students.map(s=>`<option value="${s.id}"${s.id===selected?' selected':''}>${esc(s.name)}</option>`).join('');
 }
 
-function openOccupied(c) {
-  const s = getS(c.lesson.sid);
-  ctx.cell = c;
-  document.getElementById('occupiedInfo').innerHTML =
-    `<strong style="color:var(--body)">${esc(s ? s.name : '?')}</strong><br>
-     ${fmtDateLong(c.date)} · ${c.time}<br>
-     <span style="font-size:12px">${c.lesson.kind === 'extra' ? 'Разовое занятие' : 'Постоянное занятие по расписанию'}${
-       c.lesson.movedFrom ? ' (перенос с ' + c.lesson.movedFrom + ')' : ''}</span>`;
+function buildTimeOptions(selected){
+  return ALL_TIMES.map(t=>`<option value="${t}"${t===selected?' selected':''}>${t}</option>`).join('');
+}
 
-  let actions = '';
-  if (c.lesson.kind === 'extra' && !c.lesson.movedFrom) {
-    actions += `<button class="btn btn-ghost" style="width:100%;justify-content:center"
-        onclick="moveExtraToSchedule('${c.date}','${c.time}')">📌 Сделать постоянным</button>`;
+function openOccupied(date,time,info){
+  ctx.occ={date,time,info};
+  const s=getS(info.sid);
+  document.getElementById('occupiedInfo').innerHTML=`
+    <strong>${esc(s?s.name:'?')}</strong><br>
+    ${fmtDateLong(date)} · ${info.startTime} · ${durText(info.durMin)}<br>
+    <span style="font-size:12px">${info.kind==='extra'?'Разовое занятие':'Постоянное расписание'}${info.movedFrom?' (перенос с '+info.movedFrom+')':''}</span>`;
+  let a='';
+  if(info.kind==='extra'&&!info.movedFrom){
+    a+=`<button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="makeRegular()">📌 Сделать постоянным</button>`;
   }
-  actions += `<button class="btn btn-ghost" style="width:100%;justify-content:center;${actions ? 'margin-top:8px' : ''}"
-      onclick="openMoveFrom('${c.date}','${c.time}')">↔ Перенести на другое время</button>`;
-  actions += `<button class="btn btn-danger" style="width:100%;justify-content:center;margin-top:8px"
-      onclick="removeLesson('${c.date}','${c.time}')">
-      ${c.lesson.kind === 'extra' ? (c.lesson.movedFrom ? '↩ Вернуть на ' + c.lesson.movedFrom : '✕ Удалить это занятие') : '✕ Отменить занятие на этот день'}</button>`;
-  document.getElementById('occupiedActions').innerHTML = actions;
+  a+=`<button class="btn btn-ghost" style="width:100%;justify-content:center;${a?'margin-top:8px':''}" onclick="openMove()">↔ Перенести</button>`;
+  a+=`<button class="btn btn-danger" style="width:100%;justify-content:center;margin-top:8px" onclick="cancelLesson()">
+    ${info.kind==='extra'?(info.movedFrom?'↩ Вернуть на '+info.movedFrom:'✕ Удалить'):'✕ Отменить на этот день'}</button>`;
+  document.getElementById('occupiedActions').innerHTML=a;
   openM('mOccupied');
 }
 
-window.moveExtraToSchedule = async function(date, time) {
-  const c = buildCell(new Date(date + 'T00:00:00'), time);
-  if (!c.lesson) return;
-  const s = getS(c.lesson.sid);
-  if (!s) return;
-  const dow = new Date(date + 'T00:00:00').getDay();
-  const list = [...(s.schedule || [])];
-  if (!list.some(sl => Number(sl.dow) === dow && sl.time === time)) list.push({ id: uid(), dow, time });
-  const ov = (s.overrides || []).filter(o => o.id !== c.lesson.oid);
-  const ok = await updateStudent(s.id, { schedule: list, overrides: ov });
-  if (!ok) return;
-  closeM('mOccupied');
-  render(); renderCalendar();
+window.makeRegular=async function(){
+  const{date,info}=ctx.occ; if(!info)return;
+  const s=getS(info.sid); if(!s)return;
+  const dow=new Date(date+'T00:00:00').getDay();
+  const list=[...(s.schedule||[])];
+  if(!list.some(sl=>Number(sl.dow)===dow&&sl.time===info.startTime))
+    list.push({id:uid(),dow,time:info.startTime,durMin:info.durMin});
+  const ov=(s.overrides||[]).filter(o=>o.id!==info.oid);
+  const ok=await updateStudent(s.id,{schedule:list,overrides:ov});
+  if(!ok)return;
+  closeM('mOccupied'); render(); renderCalendar();
 };
 
-function openFreed(c) {
-  const s = getS(c.cancel.sid);
-  ctx.cell = c;
-  document.getElementById('bookModalTitle').textContent = 'Свободное окно';
-  document.getElementById('bookInfo').innerHTML =
-    `<strong style="color:var(--body)">${fmtDateLong(c.date)} · ${c.time}</strong><br>
-     Занятие ${esc(s ? s.name : '')} на этот день отменено — окно свободно.${
-       c.cancel.pairId ? '<br><span style="font-size:12px">Это часть переноса: вернёте — занятие встанет на прежнее место.</span>' : ''}`;
-  document.getElementById('bookStudent').innerHTML = studentOptions();
-  const rb = document.getElementById('bookRestoreBtn');
-  rb.style.display = '';
-  rb.textContent = c.cancel.pairId ? '↩ Вернуть перенос обратно' : '↩ Вернуть занятие';
-  document.getElementById('bookSaveBtn').textContent = 'Записать другого';
-  openM('mBook');
-}
-
-function openBook(c) {
-  ctx.cell = c;
-  document.getElementById('bookModalTitle').textContent = 'Занять окно';
-  document.getElementById('bookInfo').innerHTML =
-    `<strong style="color:var(--body)">${fmtDateLong(c.date)} · ${c.time}</strong><br>
-     Свободное окно. Выберите ученика, чтобы записать разовое занятие.`;
-  document.getElementById('bookStudent').innerHTML = studentOptions();
-  document.getElementById('bookRestoreBtn').style.display = 'none';
-  document.getElementById('bookSaveBtn').textContent = 'Занять';
-  openM('mBook');
-}
-
-function openClosed(c) {
-  ctx.cell = c;
-  document.getElementById('closedInfo').innerHTML =
-    `<strong style="color:var(--body)">${fmtDateLong(c.date)} · ${c.time}</strong><br>
-     Это время вне ваших рабочих часов.`;
-  document.getElementById('closedStudent').innerHTML =
-    `<option value="">— не записывать занятие —</option>` + studentOptions();
-  openM('mClosed');
-}
-
-window.openMoveFrom = function(date, time) {
-  const c = buildCell(new Date(date + 'T00:00:00'), time);
-  if (!c.lesson) return;
-  const s = getS(c.lesson.sid);
-  ctx.move = c;
-  document.getElementById('mvInfo').innerHTML =
-    `<strong style="color:var(--body)">${esc(s ? s.name : '?')}</strong><br>
-     ${fmtDateLong(date)} · сейчас в ${time}`;
-  document.getElementById('mvTime').value = time;
-  document.getElementById('eMv').textContent = '';
+window.openMove=function(){
+  const{date,time,info}=ctx.occ; if(!info)return;
+  const s=getS(info.sid);
+  ctx.move={date,time,info};
+  document.getElementById('mvInfo').innerHTML=`<strong>${esc(s?s.name:'?')}</strong><br>${fmtDateLong(date)} · ${info.startTime}`;
+  document.getElementById('mvDate').value=date;
+  document.getElementById('mvTime').innerHTML=buildTimeOptions(info.startTime);
+  const sel=document.getElementById('mvDur');
+  sel.value=String(info.durMin||60);
+  document.getElementById('eMv').textContent='';
   openM('mMove');
 };
 
-window.saveMove = async function() {
-  const c = ctx.move;
-  if (!c) return;
-  const raw = document.getElementById('mvTime').value;
-  if (!raw || !raw.includes(':')) { document.getElementById('eMv').textContent = 'Выберите время'; return; }
-  const newTime = normTime(raw);
-  document.getElementById('eMv').textContent = '';
-  if (newTime === c.time) { closeM('mMove'); return; }
+window.saveMove=async function(){
+  const{date,info}=ctx.move; if(!info)return;
+  const newDate=document.getElementById('mvDate').value||date;
+  const newTime=document.getElementById('mvTime').value;
+  const newDur=parseInt(document.getElementById('mvDur').value)||60;
+  document.getElementById('eMv').textContent='';
+  if(!newTime){document.getElementById('eMv').textContent='Выберите время';return;}
 
-  const s = getS(c.lesson.sid);
-  if (!s) return;
-  const pairId = uid();
-  let ov = [...(s.overrides || [])];
-  if (c.lesson.kind === 'regular') {
-    ov.push({ id: uid(), date: c.date, time: c.time, type: 'cancel', pairId });
-  } else {
-    ov = ov.filter(o => o.id !== c.lesson.oid && !(c.lesson.pairId && o.pairId === c.lesson.pairId));
-  }
-  ov.push({ id: uid(), date: c.date, time: newTime, type: 'extra', pairId, movedFrom: c.time });
-
-  const ok = await updateStudent(s.id, { overrides: ov });
-  if (!ok) return;
-  closeM('mMove'); closeM('mOccupied');
-  render(); renderCalendar();
-};
-
-window.removeLesson = async function(date, time) {
-  const c = buildCell(new Date(date + 'T00:00:00'), time);
-  if (!c.lesson) return;
-  const s = getS(c.lesson.sid);
-  if (!s) return;
-  const ov = (s.overrides || []).filter(o => {
-    if (o.id === c.lesson.oid) return false;
-    if (c.lesson.pairId && o.pairId === c.lesson.pairId) return false;
-    return true;
-  });
-  if (c.lesson.kind === 'regular' && !c.lesson.pairId) {
-    ov.push({ id: uid(), date, time, type: 'cancel' });
-  }
-  const ok = await updateStudent(s.id, { overrides: ov });
-  if (!ok) return;
-  closeM('mOccupied');
-  render(); renderCalendar();
-};
-
-window.saveBooking = async function() {
-  const c = ctx.cell;
-  if (!c) return;
-  const sid = document.getElementById('bookStudent').value;
-  if (!sid) { alert('Выберите ученика'); return; }
-  const s = getS(sid);
-  if (!s) return;
-  const ov = [...(s.overrides || []), { id: uid(), date: c.date, time: c.time, type: 'extra' }];
-  const ok = await updateStudent(sid, { overrides: ov });
-  if (!ok) return;
-  closeM('mBook');
-  render(); renderCalendar();
-};
-
-window.openThisSlot = async function() {
-  const c = ctx.cell;
-  if (!c) return;
-  if (!opens.some(o => o.date === c.date && o.time === c.time)) {
-    opens.push({ id: uid(), date: c.date, time: c.time });
-    await saveSetting('opens', opens);
-  }
-  const sid = document.getElementById('closedStudent').value;
-  if (sid) {
-    const s = getS(sid);
-    if (s) {
-      const ov = [...(s.overrides || []), { id: uid(), date: c.date, time: c.time, type: 'extra' }];
-      await updateStudent(sid, { overrides: ov });
+  // Проверка конфликтов на новом месте
+  const newD=new Date(newDate+'T00:00:00');
+  const newSlots=slotsCovered(newTime,newDur);
+  const dates=weekDates(weekOffset);
+  // Для проверки берём 4 недели
+  const allDates=[...Array(28)].map((_,i)=>{ const d=new Date(newDate+'T00:00:00'); d.setDate(d.getDate()-14+i); return d; });
+  const oMap=occupancyMap(allDates);
+  for(const t of newSlots){
+    const k=newDate+'|'+t;
+    const conflict=oMap.get(k);
+    if(conflict&&conflict.sid!==info.sid){
+      document.getElementById('eMv').textContent=`Конфликт: ${getS(conflict.sid)?.name||'?'} в ${t}`;return;
     }
   }
-  closeM('mClosed');
-  render(); renderCalendar();
+
+  const s=getS(info.sid); if(!s)return;
+  const pairId=uid();
+  let ov=[...(s.overrides||[])];
+  if(info.kind==='regular'){
+    ov.push({id:uid(),date,time:info.startTime,type:'cancel',pairId});
+  } else {
+    ov=ov.filter(o=>o.id!==info.oid&&!(info.pairId&&o.pairId===info.pairId));
+  }
+  ov.push({id:uid(),date:newDate,time:newTime,type:'extra',pairId,movedFrom:info.startTime+'@'+date,durMin:newDur});
+  const ok=await updateStudent(s.id,{overrides:ov});
+  if(!ok)return;
+  closeM('mMove'); closeM('mOccupied'); render(); renderCalendar();
 };
 
-window.bookClosedSlot = async function() {
-  const c = ctx.cell;
-  if (!c) return;
-  const sid = document.getElementById('closedStudent').value;
-  if (!sid) { alert('Выберите ученика или нажмите «Открыть это окно»'); return; }
-  const s = getS(sid);
-  if (!s) return;
-  const ov = [...(s.overrides || []), { id: uid(), date: c.date, time: c.time, type: 'extra' }];
-  const ok = await updateStudent(sid, { overrides: ov });
-  if (!ok) return;
-  closeM('mClosed');
-  render(); renderCalendar();
+window.cancelLesson=async function(){
+  const{date,info}=ctx.occ; if(!info)return;
+  const s=getS(info.sid); if(!s)return;
+  let ov=[...(s.overrides||[])];
+  if(info.kind==='extra'){
+    ov=ov.filter(o=>o.id!==info.oid&&!(info.pairId&&o.pairId===info.pairId));
+  } else {
+    ov.push({id:uid(),date,time:info.startTime,type:'cancel'});
+  }
+  const ok=await updateStudent(s.id,{overrides:ov});
+  if(!ok)return;
+  closeM('mOccupied'); render(); renderCalendar();
 };
 
-window.restoreLesson = async function() {
-  const c = ctx.cell;
-  if (!c || !c.cancel) return;
-  const s = getS(c.cancel.sid);
-  if (!s) return;
-  const ov = (s.overrides || []).filter(o => o.id !== c.cancel.oid && !(c.cancel.pairId && o.pairId === c.cancel.pairId));
-  const ok = await updateStudent(s.id, { overrides: ov });
-  if (!ok) return;
-  closeM('mBook');
-  render(); renderCalendar();
-};
-
-// ══ Work hours ════════════════════════════════════════
-window.openWorkHours = function() { renderWorkHours(); openM('mWorkHours'); };
-
-function renderWorkHours() {
-  let html = '<thead><tr><th></th>';
-  DOW_ORDER.forEach(d => { html += `<th>${DOW_SHORT[d]}</th>`; });
-  html += '</tr></thead><tbody>';
-  ALL_TIMES.forEach(t => {
-    html += `<tr><td class="wh-time">${t}</td>`;
-    DOW_ORDER.forEach(d => {
-      const on = workTimesFor(d).includes(t);
-      html += `<td class="wh-cell${on ? ' on' : ''}" onclick="toggleWH(${d},'${t}')">${on ? '✓' : ''}</td>`;
-    });
-    html += '</tr>';
-  });
-  html += '</tbody>';
-  document.getElementById('whTable').innerHTML = html;
+function openBook(date,time,cancelInfo){
+  ctx.book={date,time,cancelInfo};
+  document.getElementById('bookTitle').textContent=cancelInfo?'Свободное окно':'Занять окно';
+  document.getElementById('bookInfo').innerHTML=`<strong>${fmtDateLong(date)} · ${time}</strong><br>${cancelInfo?`Занятие ${esc(getS(cancelInfo.o.sid)?.name||'')} отменено — окно свободно.`:'Свободное окно.'}`;
+  document.getElementById('bookStudent').innerHTML=sOpts();
+  document.getElementById('bookDur').value='60';
+  document.getElementById('eBook').textContent='';
+  document.getElementById('bookRestoreBtn').style.display=cancelInfo?'':'none';
+  document.getElementById('bookSaveBtn').textContent=cancelInfo?'Записать другого':'Занять';
+  openM('mBook');
 }
 
-window.toggleWH = async function(dow, time) {
-  const key = String(dow);
-  const arr = [...workTimesFor(dow)];
-  const i = arr.indexOf(time);
-  if (i === -1) arr.push(time); else arr.splice(i, 1);
+window.saveBooking=async function(){
+  const{date,time}=ctx.book;
+  const sid=document.getElementById('bookStudent').value;
+  const dur=parseInt(document.getElementById('bookDur').value)||60;
+  document.getElementById('eBook').textContent='';
+  if(!sid){document.getElementById('eBook').textContent='Выберите ученика';return;}
+
+  // Проверка конфликтов
+  const newSlots=slotsCovered(time,dur);
+  const allDates=[...Array(14)].map((_,i)=>{ const d=new Date(date+'T00:00:00'); d.setDate(d.getDate()-7+i); return d; });
+  const oMap=occupancyMap(allDates);
+  for(const t of newSlots){
+    const k=date+'|'+t;
+    const conflict=oMap.get(k);
+    if(conflict&&conflict.sid!==sid){
+      document.getElementById('eBook').textContent=`Конфликт: ${getS(conflict.sid)?.name||'?'} в ${t}`;return;
+    }
+  }
+
+  const s=getS(sid); if(!s)return;
+  const ov=[...(s.overrides||[]),{id:uid(),date,time,type:'extra',durMin:dur}];
+  const ok=await updateStudent(sid,{overrides:ov});
+  if(!ok)return;
+  closeM('mBook'); render(); renderCalendar();
+};
+
+window.restoreLesson=async function(){
+  const{cancelInfo}=ctx.book; if(!cancelInfo)return;
+  const s=cancelInfo.s; if(!s)return;
+  const ov=(s.overrides||[]).filter(o=>o.id!==cancelInfo.o.id&&!(cancelInfo.o.pairId&&o.pairId===cancelInfo.o.pairId));
+  const ok=await updateStudent(s.id,{overrides:ov});
+  if(!ok)return;
+  closeM('mBook'); render(); renderCalendar();
+};
+
+function openClosed(date,time){
+  ctx.closed={date,time};
+  document.getElementById('closedInfo').innerHTML=`<strong>${fmtDateLong(date)} · ${time}</strong><br>Это время вне рабочих часов.`;
+  document.getElementById('closedStudent').innerHTML=`<option value="">— не записывать —</option>`+sOpts();
+  document.getElementById('closedDur').value='60';
+  openM('mClosed');
+}
+
+window.openThisSlot=async function(){
+  const{date,time}=ctx.closed;
+  if(!opens.some(o=>o.date===date&&o.time===time)){ opens.push({id:uid(),date,time}); await saveSetting('opens',opens); }
+  const sid=document.getElementById('closedStudent').value;
+  const dur=parseInt(document.getElementById('closedDur').value)||60;
+  if(sid){ const s=getS(sid); if(s){ const ov=[...(s.overrides||[]),{id:uid(),date,time,type:'extra',durMin:dur}]; await updateStudent(sid,{overrides:ov}); } }
+  closeM('mClosed'); render(); renderCalendar();
+};
+
+window.bookClosedSlot=async function(){
+  const{date,time}=ctx.closed;
+  const sid=document.getElementById('closedStudent').value;
+  const dur=parseInt(document.getElementById('closedDur').value)||60;
+  if(!sid){alert('Выберите ученика или нажмите «Открыть окно»');return;}
+  const s=getS(sid); if(!s)return;
+  const ov=[...(s.overrides||[]),{id:uid(),date,time,type:'extra',durMin:dur}];
+  const ok=await updateStudent(sid,{overrides:ov});
+  if(!ok)return;
+  closeM('mClosed'); render(); renderCalendar();
+};
+
+// ── Work hours ────────────────────────────────────────
+window.openWorkHours=function(){ renderWorkHours(); openM('mWorkHours'); };
+
+function renderWorkHours(){
+  let html='<thead><tr><th></th>';
+  DOW_ORDER.forEach(d=>{ html+=`<th>${DOW_SHORT[d]}</th>`; });
+  html+='</tr></thead><tbody>';
+  ALL_TIMES.forEach(t=>{
+    html+=`<tr><td class="wh-time">${t}</td>`;
+    DOW_ORDER.forEach(d=>{
+      const on=workTimesFor(d).includes(t);
+      html+=`<td class="wh-cell${on?' on':''}" onclick="toggleWH(${d},'${t}')">${on?'✓':''}</td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</tbody>';
+  document.getElementById('whTable').innerHTML=html;
+}
+
+window.toggleWH=async function(dow,time){
+  const key=String(dow);
+  const arr=[...workTimesFor(dow)];
+  const i=arr.indexOf(time);
+  if(i===-1)arr.push(time); else arr.splice(i,1);
   arr.sort(hmSort);
-  workHours = { ...workHours, [key]: arr };
+  workHours={...workHours,[key]:arr};
   renderWorkHours();
-  await saveSetting('work_hours', workHours);
+  await saveSetting('work_hours',workHours);
   renderCalendar();
 };
 
-// ══ Student CRUD ══════════════════════════════════════
-window.selectS = function(id) { sel = id; render(); };
+// ── Student CRUD ──────────────────────────────────────
+window.selectS=function(id){ sel=id; render(); };
 
-window.openAddStudent = function() {
-  document.getElementById('sName').value = '';
-  document.getElementById('sSubj').value = '';
-  document.getElementById('eSName').textContent = '';
+window.openAddStudent=function(){
+  document.getElementById('sName').value='';
+  document.getElementById('sSubj').value='';
+  document.getElementById('eSName').textContent='';
   openM('mAddStudent');
-  setTimeout(() => document.getElementById('sName').focus(), 180);
+  setTimeout(()=>document.getElementById('sName').focus(),180);
 };
 
-window.saveStudent = async function() {
-  const name = document.getElementById('sName').value.trim();
-  const subj = document.getElementById('sSubj').value.trim();
-  if (!name) { document.getElementById('eSName').textContent = 'Введите имя'; return; }
-  document.getElementById('eSName').textContent = '';
-
-  const s = {
-    id: uid(), name, subject: subj,
-    payments: [], lessons: [], schedule: [], overrides: [],
-    created_at: new Date().toISOString(),
-  };
-  const ok = await insertStudent(s);
-  if (!ok) return;
-  closeM('mAddStudent');
-  sel = s.id;
-  render();
-  renderCalendar();
+window.saveStudent=async function(){
+  const name=document.getElementById('sName').value.trim();
+  const subj=document.getElementById('sSubj').value.trim();
+  if(!name){document.getElementById('eSName').textContent='Введите имя';return;}
+  document.getElementById('eSName').textContent='';
+  const s={id:uid(),name,subject:subj,payments:[],lessons:[],schedule:[],overrides:[],created_at:new Date().toISOString()};
+  const ok=await insertStudent(s);
+  if(!ok)return;
+  closeM('mAddStudent'); sel=s.id; render(); renderCalendar();
 };
 
-window.openDelStudent = function(id) {
-  const s = getS(id);
-  pendDel = id;
-  document.getElementById('delStudentText').textContent =
-    `Удалить ученика «${s.name}» вместе с оплатами, занятиями и расписанием? Действие необратимо.`;
+window.openDelStudent=function(id){
+  const s=getS(id); pendDel=id;
+  document.getElementById('delStudentText').textContent=`Удалить ученика «${s.name}» вместе со всеми данными? Действие необратимо.`;
   openM('mDelStudent');
 };
 
-window.confirmDelStudent = async function() {
-  const ok = await deleteStudent(pendDel);
-  if (!ok) return;
-  if (sel === pendDel) sel = students.length ? students[0].id : null;
-  pendDel = null;
-  closeM('mDelStudent');
-  render();
-  renderCalendar();
+window.confirmDelStudent=async function(){
+  const ok=await deleteStudent(pendDel);
+  if(!ok)return;
+  if(sel===pendDel)sel=students.length?students[0].id:null;
+  pendDel=null; closeM('mDelStudent'); render(); renderCalendar();
 };
 
-// ══ Schedule slots ════════════════════════════════════
-window.openAddSlot = function(id) {
-  ctx.slotStudent = id;
-  document.getElementById('slotDay').innerHTML =
-    DOW_ORDER.map(d => `<option value="${d}">${DOW_FULL[d]}</option>`).join('');
-  document.getElementById('slotTime').innerHTML =
-    ALL_TIMES.map(t => `<option value="${t}">${t}</option>`).join('');
-  document.getElementById('eSlot').textContent = '';
+// ── Schedule slots ────────────────────────────────────
+window.openAddSlot=function(id){
+  ctx.slotStudent=id;
+  document.getElementById('slotDay').innerHTML=DOW_ORDER.map(d=>`<option value="${d}">${DOW_FULL[d]}</option>`).join('');
+  document.getElementById('slotTime').innerHTML=ALL_TIMES.map(t=>`<option value="${t}">${t}</option>`).join('');
+  document.getElementById('slotDur').value='60';
+  document.getElementById('eSlot').textContent='';
   openM('mAddSlot');
 };
 
-window.saveSlot = async function() {
-  const s = getS(ctx.slotStudent);
-  if (!s) return;
-  const dow = Number(document.getElementById('slotDay').value);
-  const time = document.getElementById('slotTime').value;
-  const list = [...(s.schedule || [])];
-  if (list.some(sl => Number(sl.dow) === dow && sl.time === time)) {
-    document.getElementById('eSlot').textContent = 'Такое занятие уже есть';
-    return;
+window.saveSlot=async function(){
+  const s=getS(ctx.slotStudent); if(!s)return;
+  const dow=Number(document.getElementById('slotDay').value);
+  const time=document.getElementById('slotTime').value;
+  const durMin=parseInt(document.getElementById('slotDur').value)||60;
+  const list=[...(s.schedule||[])];
+  if(list.some(sl=>Number(sl.dow)===dow&&sl.time===time)){document.getElementById('eSlot').textContent='Такое занятие уже есть';return;}
+
+  // Проверка конфликтов
+  const newSlots=slotsCovered(time,durMin);
+  const allDates=[...Array(7)].map((_,i)=>{ const d=new Date(); d.setDate(d.getDate()-d.getDay()+1+i); return d; });
+  for(const os of newSlots){
+    const clash=students.find(o=>o.id!==s.id&&(o.schedule||[]).some(sl=>Number(sl.dow)===dow&&slotsCovered(sl.time,sl.durMin||60).includes(os)));
+    if(clash){document.getElementById('eSlot').textContent=`Конфликт с ${clash.name} в ${os}`;return;}
   }
-  const clash = students.find(o => o.id !== s.id &&
-    (o.schedule || []).some(sl => Number(sl.dow) === dow && sl.time === time));
-  if (clash) {
-    document.getElementById('eSlot').textContent = `Это время уже занято: ${clash.name}`;
-    return;
-  }
-  list.push({ id: uid(), dow, time });
-  const ok = await updateStudent(s.id, { schedule: list });
-  if (!ok) return;
-  closeM('mAddSlot');
+
+  list.push({id:uid(),dow,time,durMin});
+  const ok=await updateStudent(s.id,{schedule:list});
+  if(!ok)return;
+  closeM('mAddSlot'); render(); renderCalendar();
+};
+
+window.removeSlot=async function(id,slotId){
+  const s=getS(id); if(!s)return;
+  const list=(s.schedule||[]).filter(sl=>sl.id!==slotId);
+  const ok=await updateStudent(s.id,{schedule:list});
+  if(!ok)return;
   render(); renderCalendar();
 };
 
-window.removeSlot = async function(id, slotId) {
-  const s = getS(id);
-  if (!s) return;
-  const list = (s.schedule || []).filter(sl => sl.id !== slotId);
-  const ok = await updateStudent(s.id, { schedule: list });
-  if (!ok) return;
-  render(); renderCalendar();
-};
-
-// ══ Payments ══════════════════════════════════════════
-window.openAddPay = function(id) {
-  sel = id;
-  document.getElementById('pDate').value = todayISO();
-  document.getElementById('pLessons').value = '';
-  document.getElementById('pNote').value = '';
-  document.getElementById('ePLessons').textContent = '';
+// ── Payments ──────────────────────────────────────────
+window.openAddPay=function(id){
+  sel=id;
+  document.getElementById('pDate').value=todayISO();
+  document.getElementById('pLessons').value='';
+  document.getElementById('pNote').value='';
+  document.getElementById('ePLessons').textContent='';
   openM('mAddPay');
-  setTimeout(() => document.getElementById('pLessons').focus(), 180);
+  setTimeout(()=>document.getElementById('pLessons').focus(),180);
 };
 
-window.savePay = async function() {
-  const lessons = parseInt(document.getElementById('pLessons').value);
-  const date = document.getElementById('pDate').value || todayISO();
-  const note = document.getElementById('pNote').value.trim();
-  if (!lessons || lessons < 1) {
-    document.getElementById('ePLessons').textContent = 'Введите количество занятий';
-    return;
-  }
-  document.getElementById('ePLessons').textContent = '';
-  const s = getS(sel);
-  if (!s) return;
-  const payments = [...(s.payments || []), { id: uid(), date, lessons, note }];
-  const ok = await updateStudent(sel, { payments });
-  if (!ok) return;
-  closeM('mAddPay');
-  render();
+window.savePay=async function(){
+  const lessons=parseInt(document.getElementById('pLessons').value);
+  const date=document.getElementById('pDate').value||todayISO();
+  const note=document.getElementById('pNote').value.trim();
+  if(!lessons||lessons<1){document.getElementById('ePLessons').textContent='Введите количество занятий';return;}
+  document.getElementById('ePLessons').textContent='';
+  const s=getS(sel); if(!s)return;
+  const payments=[...(s.payments||[]),{id:uid(),date,lessons,note}];
+  const ok=await updateStudent(sel,{payments});
+  if(!ok)return;
+  closeM('mAddPay'); render();
 };
 
-// ══ Lessons done ══════════════════════════════════════
-window.openLesson = function(id) {
-  sel = id;
-  document.getElementById('lDate').value = todayISO();
-  document.getElementById('lCount').value = '1';
-  document.getElementById('lNote').value = '';
-  document.getElementById('eLCount').textContent = '';
+// ── Lessons done ──────────────────────────────────────
+window.openLesson=function(id){
+  sel=id;
+  document.getElementById('lDate').value=todayISO();
+  document.getElementById('lCount').value='1';
+  document.getElementById('lNote').value='';
+  document.getElementById('eLCount').textContent='';
   openM('mLesson');
-  setTimeout(() => document.getElementById('lNote').focus(), 180);
+  setTimeout(()=>document.getElementById('lNote').focus(),180);
 };
 
-window.saveLesson = async function() {
-  const count = parseInt(document.getElementById('lCount').value);
-  const date = document.getElementById('lDate').value || todayISO();
-  const note = document.getElementById('lNote').value.trim();
-  if (!count || count < 1) {
-    document.getElementById('eLCount').textContent = 'Введите количество';
-    return;
-  }
-  document.getElementById('eLCount').textContent = '';
-  const s = getS(sel);
-  if (!s) return;
-  const lessons = [...(s.lessons || []), { id: uid(), date, count, note }];
-  const ok = await updateStudent(sel, { lessons });
-  if (!ok) return;
-  closeM('mLesson');
+window.saveLesson=async function(){
+  const count=parseInt(document.getElementById('lCount').value);
+  const date=document.getElementById('lDate').value||todayISO();
+  const note=document.getElementById('lNote').value.trim();
+  if(!count||count<1){document.getElementById('eLCount').textContent='Введите количество';return;}
+  document.getElementById('eLCount').textContent='';
+  const s=getS(sel); if(!s)return;
+  const lessons=[...(s.lessons||[]),{id:uid(),date,count,note}];
+  const ok=await updateStudent(sel,{lessons});
+  if(!ok)return;
+  closeM('mLesson'); render();
+};
+
+window.delEntry=async function(sid,type,eid){
+  const s=getS(sid); if(!s)return;
+  const up={};
+  if(type==='pay')up.payments=(s.payments||[]).filter(p=>p.id!==eid);
+  else up.lessons=(s.lessons||[]).filter(l=>l.id!==eid);
+  const ok=await updateStudent(sid,up);
+  if(!ok)return;
   render();
 };
 
-window.delEntry = async function(sid, type, eid) {
-  const s = getS(sid);
-  if (!s) return;
-  const updates = {};
-  if (type === 'pay') updates.payments = (s.payments || []).filter(p => p.id !== eid);
-  else               updates.lessons  = (s.lessons  || []).filter(l => l.id !== eid);
-  const ok = await updateStudent(sid, updates);
-  if (!ok) return;
-  render();
+// ── Link ──────────────────────────────────────────────
+window.copyStudentLink=function(id){
+  const s=getS(id);
+  const url=new URL(window.location.href);
+  url.search=''; url.hash='';
+  const base=url.href.replace(/index\.html$/,'').replace(/\/$/,'');
+  const link=`${base}/student-view.html?id=${id}`;
+  navigator.clipboard.writeText(link).then(()=>alert(`Ссылка для ${s?s.name:''} скопирована.\n\n${link}`)).catch(()=>prompt('Скопируйте ссылку:',link));
 };
 
-// ══ Student link ══════════════════════════════════════
-window.copyStudentLink = function(id) {
-  const s = getS(id);
-  const url = new URL(window.location.href);
-  url.search = '';
-  url.hash = '';
-  const base = url.href.replace(/index\.html$/, '').replace(/\/$/, '');
-  const link = `${base}/student-view.html?id=${id}`;
-  navigator.clipboard.writeText(link).then(() => {
-    alert(`Ссылка для ${s ? s.name : ''} скопирована.\n\n${link}`);
-  }).catch(() => {
-    prompt('Скопируйте ссылку и отправьте ученику:', link);
-  });
-};
+// ── Modals ────────────────────────────────────────────
+function openM(id){ document.getElementById(id).classList.add('open'); }
+function closeM(id){ document.getElementById(id).classList.remove('open'); }
+window.closeM=closeM;
+document.querySelectorAll('.backdrop').forEach(el=>{ el.addEventListener('click',e=>{ if(e.target===el)closeM(el.id); }); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')['mAddStudent','mAddPay','mLesson','mDelStudent','mAddSlot','mOccupied','mBook','mClosed','mMove','mWorkHours'].forEach(closeM); });
 
-// ══ Modals ════════════════════════════════════════════
-function openM(id)  { document.getElementById(id).classList.add('open'); }
-function closeM(id) { document.getElementById(id).classList.remove('open'); }
-window.closeM = closeM;
+// ── Boot ──────────────────────────────────────────────
+document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
 
-document.querySelectorAll('.backdrop').forEach(el => {
-  el.addEventListener('click', e => { if (e.target === el) closeM(el.id); });
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape')
-    ['mAddStudent','mAddPay','mLesson','mDelStudent','mAddSlot','mOccupied','mBook','mClosed','mWorkHours','mMove']
-      .forEach(closeM);
-});
-
-// ══ Boot ══════════════════════════════════════════════
-document.getElementById('hdrDate').textContent =
-  new Date().toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long' });
-
-async function boot() {
+async function boot(){
   showLoading();
-  try {
-    const { data, error } = await supabase.from('students').select('*').order('created_at', { ascending: true });
-    if (error) throw error;
-    students = data || [];
+  try{
+    const{data,error}=await supabase.from('students').select('*').order('created_at',{ascending:true});
+    if(error)throw error;
+    students=data||[];
     setSync('ok');
-  } catch (e) {
-    console.error('students:', e);
-    setSync('error');
-    alert('Не удалось загрузить учеников. Проверьте подключение.');
-  }
-
-  try {
-    const { data, error } = await supabase.from('settings').select('*');
-    if (error) throw error;
-    const rows = data || [];
-    const wh = rows.find(r => r.key === 'work_hours');
-    const op = rows.find(r => r.key === 'opens');
-    workHours = (wh && wh.value) ? wh.value : {};
-    opens = (op && op.value) ? op.value : [];
+  }catch(e){ console.error(e); setSync('error'); alert('Не удалось загрузить учеников.'); }
+  try{
+    const{data,error}=await supabase.from('settings').select('*');
+    if(error)throw error;
+    const rows=data||[];
+    const wh=rows.find(r=>r.key==='work_hours');
+    const op=rows.find(r=>r.key==='opens');
+    workHours=(wh&&wh.value)?wh.value:{};
+    opens=(op&&op.value)?op.value:[];
     setSync('ok');
-  } catch (e) {
-    console.warn('settings:', e);
-    workHours = {}; opens = [];
-  }
-
+  }catch(e){ console.warn(e); workHours={}; opens=[]; }
   hideLoading();
-  if (students.length) sel = students[0].id;
-  render();
-  renderCalendar();
+  if(students.length)sel=students[0].id;
+  render(); renderCalendar();
 }
-
 boot();
 </script>
 </body>
