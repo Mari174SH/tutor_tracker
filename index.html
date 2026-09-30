@@ -123,6 +123,7 @@
       padding: 14px 18px;
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      flex-wrap: wrap;
     }
     .card-hd h2 {
       font-size: 11px; font-weight: 700; text-transform: uppercase;
@@ -155,7 +156,7 @@
     .fg:last-child { margin-bottom: 0; }
     label { font-size: 13px; font-weight: 500; }
     .hint { font-size: 12px; color: var(--muted); font-weight: 400; }
-    input[type="text"], input[type="number"], input[type="date"], select {
+    input[type="text"], input[type="number"], input[type="date"], input[type="time"], select {
       padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--r-sm);
       font-size: 14px; background: var(--raised); color: var(--body);
       width: 100%; font-family: inherit;
@@ -233,7 +234,7 @@
       background: var(--warn-lt); border-color: var(--warn); color: var(--warn);
     }
 
-    /* ── Chips (расписание) ── */
+    /* ── Chips ── */
     .chip {
       display: inline-flex; align-items: center; gap: 6px;
       background: var(--accent-lt); color: var(--accent);
@@ -246,21 +247,20 @@
       border-radius: 100px; line-height: 1;
     }
     .chip-x:hover { opacity: 1; background: oklch(0% 0 0 / .08); }
-    .chip.grey { background: var(--raised); color: var(--muted); border: 1px solid var(--border); }
 
     /* ── Table ── */
     .tbl-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    thead { background: var(--raised); }
-    th {
+    table.data { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.data thead { background: var(--raised); }
+    table.data th {
       text-align: left; padding: 8px 12px;
       font-size: 11px; font-weight: 700; text-transform: uppercase;
       letter-spacing: .05em; color: var(--muted);
       border-bottom: 1px solid var(--border); white-space: nowrap;
     }
-    td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    tr:last-child td { border-bottom: none; }
-    tbody tr:hover { background: var(--raised); }
+    table.data td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    table.data tr:last-child td { border-bottom: none; }
+    table.data tbody tr:hover { background: var(--raised); }
     .mono { font-variant-numeric: tabular-nums; }
 
     .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 100px; }
@@ -278,7 +278,7 @@
     .cal th, .cal td { border: 1px solid var(--border); }
     .cal thead th { padding: 0; }
     .cal .time-col {
-      width: 58px; text-align: center; font-weight: 600; color: var(--muted);
+      width: 56px; text-align: center; font-weight: 600; color: var(--muted);
       background: var(--raised); font-variant-numeric: tabular-nums; font-size: 11px;
     }
     .day-head { padding: 7px 3px; text-align: center; background: var(--raised); }
@@ -287,28 +287,26 @@
     .day-head.today { background: var(--accent-lt); }
     .day-head.today .dnum, .day-head.today .dow { color: var(--accent); }
 
-    .cell { padding: 3px 4px; vertical-align: top; height: 44px; position: relative; }
+    .cell { padding: 3px 4px; vertical-align: top; height: 34px; position: relative; }
     .cell.clickable { cursor: pointer; }
     .cell.closed {
       background: repeating-linear-gradient(45deg, transparent, transparent 5px,
                   var(--raised) 5px, var(--raised) 10px);
       cursor: default;
     }
-    .cell.opened { background: var(--surface); border-color: var(--warn); }
     .cell.free { background: var(--success-lt); }
     .cell.clickable:hover { box-shadow: inset 0 0 0 2px var(--accent); }
     .cell .plus {
       display: flex; align-items: center; justify-content: center;
-      height: 100%; font-size: 15px; color: var(--success);
-      opacity: .45; font-weight: 700;
+      height: 100%; font-size: 14px; color: var(--success);
+      opacity: .4; font-weight: 700;
     }
     .cell.clickable:hover .plus { opacity: 1; }
     .cell .who {
-      display: block; font-size: 11px; font-weight: 600; color: var(--accent);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
+      display: block; font-size: 10px; font-weight: 600; color: var(--accent);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2;
     }
     .cell .who.exc { color: var(--warn); }
-    .cell .who::before { content: ''; }
 
     .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 12px; }
     .legend span { display: inline-flex; align-items: center; }
@@ -317,11 +315,12 @@
     /* Work hours editor */
     .wh-table { border-collapse: collapse; width: 100%; font-size: 12px; }
     .wh-table th, .wh-table td { border: 1px solid var(--border); padding: 0; text-align: center; }
-    .wh-table th { padding: 6px 2px; font-size: 11px; background: var(--raised); color: var(--muted); }
-    .wh-time { padding: 3px 6px !important; font-weight: 600; color: var(--muted); background: var(--raised); font-size: 11px; }
-    .wh-cell { padding: 5px 2px !important; cursor: pointer; color: transparent; font-weight: 700; user-select: none; }
+    .wh-table th { padding: 6px 2px; font-size: 11px; background: var(--raised); color: var(--muted); position: sticky; top: 0; z-index: 1; }
+    .wh-time { padding: 2px 5px !important; font-weight: 600; color: var(--muted); background: var(--raised); font-size: 10px; white-space: nowrap; }
+    .wh-cell { padding: 3px 2px !important; cursor: pointer; color: transparent; font-weight: 700; user-select: none; font-size: 11px; }
     .wh-cell:hover { background: var(--accent-lt); }
     .wh-cell.on { background: var(--success-lt); color: var(--success); }
+    .wh-scroll { max-height: 62dvh; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--r); }
 
     /* ── Modal ── */
     .backdrop {
@@ -341,7 +340,7 @@
     .modal-hd {
       padding: 16px 18px 12px; border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; background: var(--surface); z-index: 1;
+      position: sticky; top: 0; background: var(--surface); z-index: 2;
     }
     .modal-hd h3 { font-size: 15px; font-weight: 600; }
     .modal-bd { padding: 18px; }
@@ -524,7 +523,7 @@
   </div>
 </div>
 
-<!-- Добавить слот в постоянное расписание -->
+<!-- Постоянное занятие в расписании -->
 <div class="backdrop" id="mAddSlot" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-hd">
@@ -574,19 +573,19 @@
       <h3 id="bookModalTitle">Занять окно</h3>
       <button class="btn btn-icon btn-ghost" onclick="closeM('mBook')" aria-label="Закрыть">✕</button>
     </div>
-  <div class="modal-bd">
-    <p class="modal-sub" id="bookInfo"></p>
-    <div class="fg" id="bookStudentWrap">
-      <label for="bookStudent">Кто занимает</label>
-      <select id="bookStudent"></select>
+    <div class="modal-bd">
+      <p class="modal-sub" id="bookInfo"></p>
+      <div class="fg" id="bookStudentWrap">
+        <label for="bookStudent">Кто занимает</label>
+        <select id="bookStudent"></select>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeM('mBook')">Отмена</button>
+      <button class="btn btn-ghost" style="display:none" id="bookRestoreBtn" onclick="restoreLesson()">↩ Вернуть занятие</button>
+      <button class="btn btn-primary" id="bookSaveBtn" onclick="saveBooking()">Занять</button>
     </div>
   </div>
-  <div class="modal-ft">
-    <button class="btn btn-ghost" onclick="closeM('mBook')">Отмена</button>
-    <button class="btn btn-ghost" style="display:none" id="bookRestoreBtn" onclick="restoreLesson()">↩ Вернуть занятие</button>
-    <button class="btn btn-primary" id="bookSaveBtn" onclick="saveBooking()">Занять</button>
-  </div>
-</div>
 </div>
 
 <!-- Клик по нерабочей клетке -->
@@ -611,16 +610,41 @@
   </div>
 </div>
 
+<!-- Перенос -->
+<div class="backdrop" id="mMove" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-hd">
+      <h3>Перенести занятие</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeM('mMove')" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="modal-bd">
+      <p class="modal-sub" id="mvInfo"></p>
+      <div class="fg">
+        <label for="mvTime">Новое время <span class="hint">(шаг 30 минут)</span></label>
+        <input type="time" id="mvTime" step="1800" />
+        <span class="ferr" id="eMv"></span>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-ghost" onclick="closeM('mMove')">Отмена</button>
+      <button class="btn btn-primary" onclick="saveMove()">Перенести</button>
+    </div>
+  </div>
+</div>
+
 <!-- Рабочие часы -->
 <div class="backdrop" id="mWorkHours" role="dialog" aria-modal="true">
-  <div class="modal" style="max-width:620px">
+  <div class="modal" style="max-width:660px">
     <div class="modal-hd">
       <h3>Рабочие часы</h3>
       <button class="btn btn-icon btn-ghost" onclick="closeM('mWorkHours')" aria-label="Закрыть">✕</button>
     </div>
     <div class="modal-bd">
-      <p class="modal-sub">Отметьте часы, в которые вы обычно проводите занятия. Изменения сохраняются сразу.</p>
-      <div class="tbl-wrap"><table class="wh-table" id="whTable"></table></div>
+      <p class="modal-sub">
+        Отметьте получасовые слоты, в которые вы работаете — например 16:30 или 17:00.
+        Изменения сохраняются сразу.
+      </p>
+      <div class="wh-scroll"><table class="wh-table" id="whTable"></table></div>
     </div>
     <div class="modal-ft">
       <button class="btn btn-primary" onclick="closeM('mWorkHours')">Готово</button>
@@ -641,16 +665,21 @@ const DOW_SHORT = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
 const DOW_FULL  = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
 const DOW_ORDER = [1,2,3,4,5,6,0];
 const MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+
+// Получасовая сетка с 07:00 до 22:30
 const ALL_TIMES = (() => {
   const a = [];
-  for (let h = 8; h <= 21; h++) a.push(String(h).padStart(2,'0') + ':00');
+  for (let h = 7; h <= 22; h++) {
+    a.push(String(h).padStart(2,'0') + ':00');
+    a.push(String(h).padStart(2,'0') + ':30');
+  }
   return a;
 })();
 
 // ══ State ═════════════════════════════════════════════
 let students = [];
-let workHours = {};       // { "1": ["15:00", ...], ... }  ключи — дни недели
-let opens = [];           // [{id, date, time}] — разово открытые окна
+let workHours = {};
+let opens = [];
 let sel = null;
 let pendDel = null;
 let weekOffset = 0;
@@ -705,6 +734,15 @@ function hmToMin(t) {
   const p = String(t).split(':');
   return (parseInt(p[0])||0) * 60 + (parseInt(p[1])||0);
 }
+function minToHM(m) {
+  return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0');
+}
+function normTime(t) {
+  // приводит "16:30" / "16:00" к сетке 30 минут
+  const m = hmToMin(t);
+  const snapped = Math.round(m / 30) * 30;
+  return minToHM(Math.max(0, Math.min(23*60+30, snapped)));
+}
 function getS(id) { return students.find(s => s.id === id); }
 function balance(s) {
   const paid = (s.payments || []).reduce((a,p) => a + (p.lessons||0), 0);
@@ -723,13 +761,7 @@ function workTimesFor(dow) {
   const v = workHours[String(dow)];
   return Array.isArray(v) ? v : [];
 }
-function scheduleText(s) {
-  if (!s.schedule || !s.schedule.length) return '';
-  return [...s.schedule]
-    .sort((a,b) => (a.dow === 0 ? 7 : a.dow) - (b.dow === 0 ? 7 : b.dow) || hmToMin(a.time) - hmToMin(b.time))
-    .map(sl => `${DOW_SHORT[sl.dow]} ${sl.time}`)
-    .join(', ');
-}
+function hmSort(a, b) { return hmToMin(a) - hmToMin(b); }
 
 // ══ DB ════════════════════════════════════════════════
 async function insertStudent(s) {
@@ -797,8 +829,7 @@ function renderList() {
   el.innerHTML = students.map(s => {
     const bal = balance(s);
     const bc  = bal > 2 ? 'bal-ok' : bal > 0 ? 'bal-warn' : 'bal-zero';
-    const sch = scheduleText(s);
-    const sub = sch || s.subject || '';
+    const sub = scheduleText(s) || s.subject || '';
     return `<div class="s-item${s.id === sel ? ' active' : ''}" tabindex="0" role="button"
         onclick="selectS('${s.id}')" onkeydown="if(event.key==='Enter'||event.key===' ')selectS('${s.id}')">
       <div class="s-avatar">${esc(initials(s.name))}</div>
@@ -809,6 +840,14 @@ function renderList() {
       <span class="bal ${bc}">${bal}</span>
     </div>`;
   }).join('');
+}
+
+function scheduleText(s) {
+  if (!s.schedule || !s.schedule.length) return '';
+  return [...s.schedule]
+    .sort((a,b) => (a.dow === 0 ? 7 : a.dow) - (b.dow === 0 ? 7 : b.dow) || hmToMin(a.time) - hmToMin(b.time))
+    .map(sl => `${DOW_SHORT[sl.dow]} ${sl.time}`)
+    .join(', ');
 }
 
 function renderPlaceholder() {
@@ -894,7 +933,7 @@ function renderDetail(id) {
     <div class="card">
       <div class="card-hd"><h2>История</h2></div>
       <div class="tbl-wrap">
-        <table>
+        <table class="data">
           <thead><tr><th>Дата</th><th>Тип</th><th>Занятия</th><th>Заметка</th><th></th></tr></thead>
           <tbody>${tBody}</tbody>
         </table>
@@ -916,11 +955,10 @@ function buildCell(dateObj, time) {
   const dow  = dateObj.getDay();
   const date = isoOf(dateObj);
   const ovs  = overridesForDate(date).filter(x => x.o.time === time);
-  const opens_   = ovs.filter(x => x.o.type === 'open');
-  const cancels  = ovs.filter(x => x.o.type === 'cancel');
-  const extras   = ovs.filter(x => x.o.type === 'extra');
-  const openHere = opens_.length > 0 ||
-    opens.some(o => o.date === date && o.time === time);
+  const cancels = ovs.filter(x => x.o.type === 'cancel');
+  const extras  = ovs.filter(x => x.o.type === 'extra');
+  const openHere = ovs.some(x => x.o.type === 'open') ||
+                   opens.some(o => o.date === date && o.time === time);
   const working  = workTimesFor(dow).includes(time);
 
   let lesson = null;
@@ -938,12 +976,13 @@ function buildCell(dateObj, time) {
       lesson = { sid: reg.id, kind: 'regular', oid: null, pairId: null, movedFrom: null };
     }
   }
-  return {
-    date, time, dow,
-    available: working || openHere,
-    lesson,
-    cancel: cancels.length ? { sid: cancels[0].s.id, oid: cancels[0].o.id, pairId: cancels[0].o.pairId || null } : null,
-  };
+
+  let cancel = null;
+  if (cancels.length && !lesson) {
+    cancel = { sid: cancels[0].s.id, oid: cancels[0].o.id, pairId: cancels[0].o.pairId || null };
+  }
+
+  return { date, time, dow, available: working || openHere, lesson, cancel };
 }
 
 function weekTimes(dates) {
@@ -956,10 +995,13 @@ function weekTimes(dates) {
       if (dates.some(d => isoOf(d) === o.date)) set.add(o.time);
     });
   });
-  return [...set].sort((a,b) => hmToMin(a) - hmToMin(b));
+  return [...set].sort(hmSort);
 }
 
 function renderCalendar() {
+  const el = document.getElementById('calTable');
+  if (!el) return;
+
   const dates = weekDates(weekOffset);
   const times = weekTimes(dates);
   const mon = dates[0], sun = dates[6];
@@ -991,10 +1033,10 @@ function renderCalendar() {
         let inner = '';
         if (c.lesson) {
           const st = getS(c.lesson.sid);
-          cls += c.lesson.kind === 'extra' ? ' busy exc' : ' busy';
+          if (c.lesson.kind === 'extra') cls += ' busy exc';
           inner = `<span class="who${c.lesson.kind === 'extra' ? ' exc' : ''}">${esc(shortName(st ? st.name : '?'))}</span>`;
         } else if (c.cancel) {
-          cls += ' free freed';
+          cls += ' free';
           inner = `<span class="plus">+</span>`;
         } else if (c.available) {
           cls += ' free';
@@ -1008,7 +1050,7 @@ function renderCalendar() {
     });
   }
   html += '</tbody>';
-  document.getElementById('calTable').innerHTML = html;
+  el.innerHTML = html;
 }
 
 window.shiftWeek = function(n) { weekOffset += n; renderCalendar(); };
@@ -1017,11 +1059,10 @@ window.goToday  = function() { weekOffset = 0; renderCalendar(); };
 // ══ Cell clicks ═══════════════════════════════════════
 window.cellClick = function(el) {
   const date = el.dataset.d, time = el.dataset.t;
-  const d = new Date(date + 'T00:00:00');
-  const c = buildCell(d, time);
-  if (c.lesson)       return openOccupied(c);
-  if (c.cancel)       return openFreed(c);
-  if (c.available)    return openBook(c);
+  const c = buildCell(new Date(date + 'T00:00:00'), time);
+  if (c.lesson)    return openOccupied(c);
+  if (c.cancel)    return openFreed(c);
+  if (c.available) return openBook(c);
   return openClosed(c);
 };
 
@@ -1060,9 +1101,7 @@ window.moveExtraToSchedule = async function(date, time) {
   if (!s) return;
   const dow = new Date(date + 'T00:00:00').getDay();
   const list = [...(s.schedule || [])];
-  if (!list.some(sl => Number(sl.dow) === dow && sl.time === time)) {
-    list.push({ id: uid(), dow, time });
-  }
+  if (!list.some(sl => Number(sl.dow) === dow && sl.time === time)) list.push({ id: uid(), dow, time });
   const ov = (s.overrides || []).filter(o => o.id !== c.lesson.oid);
   const ok = await updateStudent(s.id, { schedule: list, overrides: ov });
   if (!ok) return;
@@ -1073,23 +1112,21 @@ window.moveExtraToSchedule = async function(date, time) {
 function openFreed(c) {
   const s = getS(c.cancel.sid);
   ctx.cell = c;
-  ctx.restore = true;
   document.getElementById('bookModalTitle').textContent = 'Свободное окно';
   document.getElementById('bookInfo').innerHTML =
     `<strong style="color:var(--body)">${fmtDateLong(c.date)} · ${c.time}</strong><br>
      Занятие ${esc(s ? s.name : '')} на этот день отменено — окно свободно.${
        c.cancel.pairId ? '<br><span style="font-size:12px">Это часть переноса: вернёте — занятие встанет на прежнее место.</span>' : ''}`;
   document.getElementById('bookStudent').innerHTML = studentOptions();
-  document.getElementById('bookRestoreBtn').style.display = '';
-  document.getElementById('bookRestoreBtn').textContent =
-    c.cancel.pairId ? '↩ Вернуть перенос обратно' : '↩ Вернуть занятие';
+  const rb = document.getElementById('bookRestoreBtn');
+  rb.style.display = '';
+  rb.textContent = c.cancel.pairId ? '↩ Вернуть перенос обратно' : '↩ Вернуть занятие';
   document.getElementById('bookSaveBtn').textContent = 'Записать другого';
   openM('mBook');
 }
 
 function openBook(c) {
   ctx.cell = c;
-  ctx.restore = false;
   document.getElementById('bookModalTitle').textContent = 'Занять окно';
   document.getElementById('bookInfo').innerHTML =
     `<strong style="color:var(--body)">${fmtDateLong(c.date)} · ${c.time}</strong><br>
@@ -1112,20 +1149,24 @@ function openClosed(c) {
 
 window.openMoveFrom = function(date, time) {
   const c = buildCell(new Date(date + 'T00:00:00'), time);
+  if (!c.lesson) return;
   const s = getS(c.lesson.sid);
   ctx.move = c;
   document.getElementById('mvInfo').innerHTML =
     `<strong style="color:var(--body)">${esc(s ? s.name : '?')}</strong><br>
      ${fmtDateLong(date)} · сейчас в ${time}`;
   document.getElementById('mvTime').value = time;
+  document.getElementById('eMv').textContent = '';
   openM('mMove');
 };
 
 window.saveMove = async function() {
   const c = ctx.move;
   if (!c) return;
-  const newTime = document.getElementById('mvTime').value;
-  if (!newTime || !newTime.includes(':')) { alert('Выберите время'); return; }
+  const raw = document.getElementById('mvTime').value;
+  if (!raw || !raw.includes(':')) { document.getElementById('eMv').textContent = 'Выберите время'; return; }
+  const newTime = normTime(raw);
+  document.getElementById('eMv').textContent = '';
   if (newTime === c.time) { closeM('mMove'); return; }
 
   const s = getS(c.lesson.sid);
@@ -1247,13 +1288,12 @@ window.toggleWH = async function(dow, time) {
   const arr = [...workTimesFor(dow)];
   const i = arr.indexOf(time);
   if (i === -1) arr.push(time); else arr.splice(i, 1);
-  arr.sort(hmToMin_sort);
+  arr.sort(hmSort);
   workHours = { ...workHours, [key]: arr };
   renderWorkHours();
   await saveSetting('work_hours', workHours);
   renderCalendar();
 };
-function hmToMin_sort(a, b) { return hmToMin(a) - hmToMin(b); }
 
 // ══ Student CRUD ══════════════════════════════════════
 window.selectS = function(id) { sel = id; render(); };
@@ -1306,10 +1346,10 @@ window.confirmDelStudent = async function() {
 // ══ Schedule slots ════════════════════════════════════
 window.openAddSlot = function(id) {
   ctx.slotStudent = id;
-  const daySel = document.getElementById('slotDay');
-  daySel.innerHTML = DOW_ORDER.map(d => `<option value="${d}">${DOW_FULL[d]}</option>`).join('');
-  const timeSel = document.getElementById('slotTime');
-  timeSel.innerHTML = ALL_TIMES.map(t => `<option value="${t}">${t}</option>`).join('');
+  document.getElementById('slotDay').innerHTML =
+    DOW_ORDER.map(d => `<option value="${d}">${DOW_FULL[d]}</option>`).join('');
+  document.getElementById('slotTime').innerHTML =
+    ALL_TIMES.map(t => `<option value="${t}">${t}</option>`).join('');
   document.getElementById('eSlot').textContent = '';
   openM('mAddSlot');
 };
@@ -1444,34 +1484,6 @@ document.addEventListener('keydown', e => {
       .forEach(closeM);
 });
 
-// ══ Move modal (injected) ═════════════════════════════
-(function injectMoveModal() {
-  const div = document.createElement('div');
-  div.className = 'backdrop';
-  div.id = 'mMove';
-  div.setAttribute('role','dialog');
-  div.innerHTML = `
-    <div class="modal">
-      <div class="modal-hd">
-        <h3>Перенести занятие</h3>
-        <button class="btn btn-icon btn-ghost" onclick="closeM('mMove')" aria-label="Закрыть">✕</button>
-      </div>
-      <div class="modal-bd">
-        <p class="modal-sub" id="mvInfo"></p>
-        <div class="fg">
-          <label for="mvTime">Новое время</label>
-          <input type="time" id="mvTime" step="900" />
-        </div>
-      </div>
-      <div class="modal-ft">
-        <button class="btn btn-ghost" onclick="closeM('mMove')">Отмена</button>
-        <button class="btn btn-primary" onclick="saveMove()">Перенести</button>
-      </div>
-    </div>`;
-  document.body.appendChild(div);
-  div.addEventListener('click', e => { if (e.target === div) closeM('mMove'); });
-})();
-
 // ══ Boot ══════════════════════════════════════════════
 document.getElementById('hdrDate').textContent =
   new Date().toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long' });
@@ -1510,7 +1522,6 @@ async function boot() {
 }
 
 boot();
-
 </script>
 </body>
 </html>
