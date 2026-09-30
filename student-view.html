@@ -78,6 +78,15 @@
     .cell { padding: 2px 3px; height: 30px; text-align: center; font-size: 10px; vertical-align: middle; }
     .cell.closed { background: repeating-linear-gradient(45deg, transparent, transparent 5px, var(--raised) 5px, var(--raised) 10px); }
     .cell.free { background: var(--success-lt); color: var(--success); font-weight: 600; }
+    @media (max-width: 480px) {
+      .cal .cell.free {
+        font-size: clamp(7px, 1.8vw, 9px);
+        padding: 2px 1px;
+        line-height: 1.2;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+    }
     .cell.mine-top { background: var(--accent-lt); color: var(--accent); font-weight: 700; border-bottom: none !important; border-radius: var(--r) var(--r) 0 0; }
     .cell.mine-mid { background: var(--accent-lt); border-top: 1px dashed oklch(56% 0.18 250 / .3) !important; border-bottom: none !important; }
     .cell.mine-bot { background: var(--accent-lt); border-top: 1px dashed oklch(56% 0.18 250 / .3) !important; border-radius: 0 0 var(--r) var(--r); }
