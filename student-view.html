@@ -6,201 +6,105 @@
   <title>Мои занятия</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:         oklch(97% 0.005 250);
-      --surface:    oklch(100% 0 0);
-      --raised:     oklch(95% 0.008 250);
-      --border:     oklch(88% 0.010 250);
-      --muted:      oklch(58% 0.015 250);
-      --body:       oklch(20% 0.015 250);
-      --accent:     oklch(56% 0.18  250);
-      --accent-lt:  oklch(94% 0.04  250);
-      --success:    oklch(54% 0.16  150);
-      --success-lt: oklch(94% 0.04  150);
-      --danger:     oklch(52% 0.18   25);
-      --danger-lt:  oklch(95% 0.04   25);
-      --warn:       oklch(62% 0.16   75);
-      --warn-lt:    oklch(96% 0.04   75);
-      --r: 10px; --r-lg: 16px;
-      --sh-sm: 0 1px 3px oklch(0% 0 0 / .08);
+      --bg: oklch(97% 0.005 250); --surface: oklch(100% 0 0);
+      --raised: oklch(95% 0.008 250); --border: oklch(88% 0.010 250);
+      --muted: oklch(58% 0.015 250); --body: oklch(20% 0.015 250);
+      --accent: oklch(56% 0.18 250); --accent-lt: oklch(94% 0.04 250);
+      --success: oklch(54% 0.16 150); --success-lt: oklch(94% 0.04 150);
+      --danger: oklch(52% 0.18 25); --danger-lt: oklch(95% 0.04 25);
+      --warn: oklch(62% 0.16 75); --warn-lt: oklch(96% 0.04 75);
+      --r: 10px; --r-lg: 16px; --sh-sm: 0 1px 3px oklch(0% 0 0 / .08);
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg:         oklch(14% 0.010 250);
-        --surface:    oklch(18% 0.012 250);
-        --raised:     oklch(22% 0.012 250);
-        --border:     oklch(30% 0.014 250);
-        --muted:      oklch(60% 0.012 250);
-        --body:       oklch(92% 0.008 250);
-        --accent:     oklch(68% 0.16  250);
-        --accent-lt:  oklch(22% 0.05  250);
-        --success:    oklch(66% 0.14  150);
-        --success-lt: oklch(20% 0.05  150);
-        --danger:     oklch(66% 0.16   25);
-        --danger-lt:  oklch(20% 0.06   25);
-        --warn:       oklch(74% 0.14   75);
-        --warn-lt:    oklch(20% 0.05   75);
+        --bg: oklch(14% 0.010 250); --surface: oklch(18% 0.012 250);
+        --raised: oklch(22% 0.012 250); --border: oklch(30% 0.014 250);
+        --muted: oklch(60% 0.012 250); --body: oklch(92% 0.008 250);
+        --accent: oklch(68% 0.16 250); --accent-lt: oklch(22% 0.05 250);
+        --success: oklch(66% 0.14 150); --success-lt: oklch(20% 0.05 150);
+        --danger: oklch(66% 0.16 25); --danger-lt: oklch(20% 0.06 25);
+        --warn: oklch(74% 0.14 75); --warn-lt: oklch(20% 0.05 75);
       }
     }
-
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0ms !important; }
+    }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--body);
-      font-size: 15px;
-      line-height: 1.6;
-      min-height: 100dvh;
-      padding: 20px;
+      background: var(--bg); color: var(--body);
+      font-size: 15px; line-height: 1.6; min-height: 100dvh; padding: 20px;
     }
-
     .container { max-width: 720px; margin: 0 auto; }
-
-    .header {
-      text-align: center;
-      margin-bottom: 28px;
-      padding-bottom: 22px;
-      border-bottom: 1px solid var(--border);
-    }
+    .header { text-align: center; margin-bottom: 28px; padding-bottom: 22px; border-bottom: 1px solid var(--border); }
     .header h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
     .header .subject { font-size: 14px; color: var(--muted); }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r-lg);
-      box-shadow: var(--sh-sm);
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--sh-sm); overflow: hidden; margin-bottom: 20px; }
     .card-hd { padding: 16px 20px; border-bottom: 1px solid var(--border); }
-    .card-hd h2 {
-      font-size: 12px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .06em; color: var(--muted);
-    }
-
-    .stats {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 1px; background: var(--border);
-    }
+    .card-hd h2 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
     @media (max-width: 480px) { .stats { grid-template-columns: 1fr 1fr; } }
     .stat { background: var(--surface); padding: 20px 16px; text-align: center; }
-    .stat-lbl {
-      font-size: 11px; color: var(--muted); text-transform: uppercase;
-      letter-spacing: .05em; margin-bottom: 6px;
-    }
+    .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
     .stat-val { font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
-    .stat-val.ok   { color: var(--success); }
-    .stat-val.warn { color: var(--warn);    }
-    .stat-val.low  { color: var(--danger);  }
-
+    .stat-val.ok { color: var(--success); }
+    .stat-val.warn { color: var(--warn); }
+    .stat-val.low { color: var(--danger); }
     table.data { width: 100%; border-collapse: collapse; font-size: 14px; }
     table.data thead { background: var(--raised); }
-    table.data th {
-      text-align: left; padding: 10px 16px;
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .05em; color: var(--muted);
-      border-bottom: 1px solid var(--border);
-    }
+    table.data th { text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); border-bottom: 1px solid var(--border); }
     table.data td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     table.data tr:last-child td { border-bottom: none; }
     table.data tbody tr:hover { background: var(--raised); }
-
     .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 100px; }
     .tag-pay { background: var(--success-lt); color: var(--success); }
     .tag-use { background: var(--raised); color: var(--muted); border: 1px solid var(--border); }
-
-    /* Расписание */
     .slots { padding: 16px 20px; }
-    .chip {
-      display: inline-block; background: var(--accent-lt); color: var(--accent);
-      font-size: 13px; font-weight: 600; padding: 5px 12px;
-      border-radius: 100px; margin: 0 6px 8px 0;
-    }
+    .chip { display: inline-block; background: var(--accent-lt); color: var(--accent); font-size: 13px; font-weight: 600; padding: 5px 12px; border-radius: 100px; margin: 0 6px 8px 0; }
 
-    /* Календарь */
+    /* Calendar */
     .cal-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .week-label { font-size: 14px; font-weight: 600; min-width: 150px; }
-    .nav-btn {
-      padding: 5px 12px; border-radius: 6px; font-size: 13px; font-weight: 500;
-      cursor: pointer; border: 1px solid var(--border); background: transparent;
-      color: var(--accent); font-family: inherit; line-height: 1;
-    }
+    .week-label { font-size: 14px; font-weight: 600; min-width: 140px; }
+    .nav-btn { padding: 5px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--accent); font-family: inherit; line-height: 1; }
     .nav-btn:hover { background: var(--accent-lt); }
-
     .cal { border-collapse: collapse; width: 100%; font-size: 12px; table-layout: fixed; }
     .cal th, .cal td { border: 1px solid var(--border); }
-    .cal .time-col {
-      width: 54px; text-align: center; font-weight: 600; color: var(--muted);
-      background: var(--raised); font-variant-numeric: tabular-nums; font-size: 10px; padding: 3px;
-    }
+    .cal .time-col { width: 54px; text-align: center; font-weight: 600; color: var(--muted); background: var(--raised); font-variant-numeric: tabular-nums; font-size: 10px; padding: 3px; }
     .day-head { padding: 7px 3px; text-align: center; background: var(--raised); }
-    .day-head .dow {
-      font-size: 10px; text-transform: uppercase; letter-spacing: .05em;
-      color: var(--muted); font-weight: 700;
-    }
+    .day-head .dow { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700; }
     .day-head .dnum { font-size: 15px; font-weight: 700; line-height: 1.25; }
     .day-head.today { background: var(--accent-lt); }
     .day-head.today .dnum, .day-head.today .dow { color: var(--accent); }
-
-    .cell { padding: 3px; text-align: center; height: 32px; font-size: 10px; }
-    .cell.closed {
-      background: repeating-linear-gradient(45deg, transparent, transparent 5px,
-                  var(--raised) 5px, var(--raised) 10px);
-    }
+    .cell { padding: 2px 3px; height: 30px; text-align: center; font-size: 10px; vertical-align: middle; }
+    .cell.closed { background: repeating-linear-gradient(45deg, transparent, transparent 5px, var(--raised) 5px, var(--raised) 10px); }
     .cell.free { background: var(--success-lt); color: var(--success); font-weight: 600; }
-    .cell.mine {
-      background: var(--accent-lt); color: var(--accent); font-weight: 700;
-      border-left: 3px solid var(--accent);
-    }
-    .cell.taken { background: var(--raised); color: var(--muted); font-weight: 600; }
-
-    .legend {
-      display: flex; gap: 16px; flex-wrap: wrap;
-      font-size: 12px; color: var(--muted); padding: 0 20px 18px;
-    }
+    .cell.mine-top { background: var(--accent-lt); color: var(--accent); font-weight: 700; border-bottom: none !important; border-radius: var(--r) var(--r) 0 0; }
+    .cell.mine-mid { background: var(--accent-lt); border-top: 1px dashed oklch(56% 0.18 250 / .3) !important; border-bottom: none !important; }
+    .cell.mine-bot { background: var(--accent-lt); border-top: 1px dashed oklch(56% 0.18 250 / .3) !important; border-radius: 0 0 var(--r) var(--r); }
+    .cell.taken { background: var(--raised); color: var(--muted); }
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); padding: 0 20px 18px; }
     .legend span { display: inline-flex; align-items: center; }
-    .legend i {
-      display: inline-block; width: 12px; height: 12px; border-radius: 3px;
-      margin-right: 5px; border: 1px solid var(--border);
-    }
-
+    .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 5px; border: 1px solid var(--border); }
     .loading { text-align: center; padding: 60px 20px; color: var(--muted); }
-    .spinner {
-      width: 40px; height: 40px; border: 4px solid var(--border);
-      border-top-color: var(--accent); border-radius: 50%;
-      animation: spin 0.8s linear infinite; margin: 0 auto 16px;
-    }
+    .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    .error {
-      text-align: center; padding: 40px 20px; color: var(--danger);
-      background: var(--danger-lt); border-radius: var(--r); margin: 20px 0;
-    }
+    .error { text-align: center; padding: 40px 20px; color: var(--danger); background: var(--danger-lt); border-radius: var(--r); margin: 20px 0; }
     .error-icon { font-size: 32px; margin-bottom: 8px; }
-
     .empty { text-align: center; padding: 36px 20px; color: var(--muted); font-size: 14px; }
-
     .footer { text-align: center; padding: 28px 20px 20px; font-size: 13px; color: var(--muted); line-height: 1.7; }
-
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0ms !important; } }
   </style>
 </head>
 <body>
-
 <div class="container">
   <div id="content">
     <div class="loading"><div class="spinner"></div><p>Загрузка данных...</p></div>
   </div>
 </div>
-
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 const SUPABASE_URL = 'https://nmexbqjqmwjsdwhuerkw.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5tZXhicWpxbXdqc2R3aHVlcmt3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg3ODc1MjgsImV4cCI6MjEwNDM2MzUyOH0.ydUjLGVtoEd6P8JIBYMlGicdNXTr4qJNr0BjiP1VEIE';
-
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const DOW_SHORT = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
@@ -209,167 +113,132 @@ const MONTHS = ['января','февраля','марта','апреля','м�
 
 const params = new URLSearchParams(window.location.search);
 const studentId = params.get('id');
+let me = null, workHours = {}, weekOffset = 0;
 
-let me = null;
-let workHours = {};
-let weekOffset = 0;
+function pad(n){ return String(n).padStart(2,'0'); }
+function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function isoOf(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function fmtDate(iso){ if(!iso)return'—'; const[y,m,d]=iso.split('-'); return`${d}.${m}.${y}`; }
+function hmToMin(t){ const p=String(t).split(':'); return(parseInt(p[0])||0)*60+(parseInt(p[1])||0); }
+function minToHM(m){ return pad(Math.floor(m/60))+':'+pad(m%60); }
+function hmSort(a,b){ return hmToMin(a)-hmToMin(b); }
+function workTimesFor(dow){ const v=workHours[String(dow)]; return Array.isArray(v)?v:[]; }
+function mondayOf(off){ const d=new Date(); d.setHours(0,0,0,0); const dw=d.getDay(); d.setDate(d.getDate()+(dw===0?-6:1-dw)+off*7); return d; }
+function weekDates(off){ const m=mondayOf(off); return Array.from({length:7},(_,i)=>{ const d=new Date(m); d.setDate(d.getDate()+i); return d; }); }
+function durText(min){ return min<60?min+' мин':(min===60?'1 ч':(min%60===0?min/60+' ч':Math.floor(min/60)+' ч '+min%60+' мин')); }
+function slotsCovered(startTime, durMin){
+  const start=hmToMin(startTime), out=[];
+  for(let m=start; m<start+durMin; m+=30) out.push(minToHM(m));
+  return out;
+}
+function balance(){ return(me.payments||[]).reduce((a,p)=>a+(p.lessons||0),0)-(me.lessons||[]).reduce((a,l)=>a+(l.count||0),0); }
 
-function esc(s) {
-  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// Cell state for this student
+function cellState(dateObj, time){
+  const dow=dateObj.getDay(), date=isoOf(dateObj);
+  const ov=(me.overrides||[]).filter(o=>o.date===date&&o.type==='extra');
+  // check if this time is covered by an extra override
+  for(const o of ov){
+    if(slotsCovered(o.time, o.durMin||60).includes(time))
+      return { kind:'mine', startTime:o.time, durMin:o.durMin||60 };
+  }
+  // check regular schedule
+  for(const sl of (me.schedule||[])){
+    if(Number(sl.dow)===dow){
+      const slots=slotsCovered(sl.time, sl.durMin||60);
+      if(slots.includes(time)){
+        const cancelled=(me.overrides||[]).some(o=>o.date===date&&o.time===sl.time&&o.type==='cancel');
+        if(!cancelled) return { kind:'mine', startTime:sl.time, durMin:sl.durMin||60 };
+      }
+    }
+  }
+  const isWorking=workTimesFor(dow).includes(time);
+  const opened=(me.overrides||[]).some(o=>o.date===date&&o.time===time&&o.type==='open');
+  if(isWorking||opened) return { kind:'free' };
+  return { kind:'taken' };
 }
-function isoOf(d) {
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-function fmtDate(iso) {
-  if (!iso) return '—';
-  const [y,m,d] = iso.split('-');
-  return `${d}.${m}.${y}`;
-}
-function hmToMin(t) {
-  const p = String(t).split(':');
-  return (parseInt(p[0])||0)*60 + (parseInt(p[1])||0);
-}
-function hmSort(a, b) { return hmToMin(a) - hmToMin(b); }
-function mondayOf(off) {
-  const d = new Date();
-  d.setHours(0,0,0,0);
-  const dow = d.getDay();
-  d.setDate(d.getDate() + (dow === 0 ? -6 : 1 - dow) + off*7);
-  return d;
-}
-function weekDates(off) {
-  const m = mondayOf(off);
-  return Array.from({length:7}, (_,i) => {
-    const d = new Date(m);
-    d.setDate(d.getDate() + i);
-    return d;
+
+function weekTimesForMe(dates){
+  const set=new Set();
+  dates.forEach(d=>workTimesFor(d.getDay()).forEach(t=>set.add(t)));
+  (me.schedule||[]).forEach(sl=>slotsCovered(sl.time,sl.durMin||60).forEach(t=>set.add(t)));
+  (me.overrides||[]).forEach(o=>{
+    if(o.type==='extra'&&dates.some(d=>isoOf(d)===o.date))
+      slotsCovered(o.time,o.durMin||60).forEach(t=>set.add(t));
   });
-}
-function workTimesFor(dow) {
-  const v = workHours[String(dow)];
-  return Array.isArray(v) ? v : [];
-}
-function balance() {
-  const paid = (me.payments || []).reduce((a,p) => a + (p.lessons||0), 0);
-  const used = (me.lessons  || []).reduce((a,l) => a + (l.count||0), 0);
-  return paid - used;
+  return[...set].sort(hmSort);
 }
 
-// ── Состояние клетки календаря для этого ученика ──────
-function cellState(dateObj, time) {
-  const dow = dateObj.getDay();
-  const date = isoOf(dateObj);
-  const ov = (me.overrides || []).filter(o => o.date === date && o.time === time);
+function renderCalendar(){
+  const el=document.getElementById('calTable'); if(!el)return;
+  const dates=weekDates(weekOffset);
+  const times=weekTimesForMe(dates);
+  const mon=dates[0],sun=dates[6];
+  const label=mon.getMonth()===sun.getMonth()
+    ?`${mon.getDate()} — ${sun.getDate()} ${MONTHS[sun.getMonth()]}`
+    :`${mon.getDate()} ${MONTHS[mon.getMonth()]} — ${sun.getDate()} ${MONTHS[sun.getMonth()]}`;
+  document.getElementById('weekLabel').textContent=label;
 
-  if (ov.some(o => o.type === 'extra')) return 'mine';
-
-  const regular = (me.schedule || []).some(sl => Number(sl.dow) === dow && sl.time === time);
-  const cancelled = ov.some(o => o.type === 'cancel');
-  if (regular && !cancelled) return 'mine';
-
-  const isWorking = workTimesFor(dow).includes(time);
-  const opened = ov.some(o => o.type === 'open');
-  if (isWorking || opened) return 'free';
-
-  return 'taken';
-}
-
-function weekTimesForMe(dates) {
-  const set = new Set();
-  dates.forEach(d => workTimesFor(d.getDay()).forEach(t => set.add(t)));
-  (me.schedule || []).forEach(sl => set.add(sl.time));
-  (me.overrides || []).forEach(o => {
-    if (dates.some(d => isoOf(d) === o.date)) set.add(o.time);
+  const todayIso=isoOf(new Date());
+  let html='<thead><tr><th class="time-col"></th>';
+  dates.forEach(d=>{
+    const isToday=isoOf(d)===todayIso;
+    html+=`<th class="day-head${isToday?' today':''}"><div class="dow">${DOW_SHORT[d.getDay()]}</div><div class="dnum">${d.getDate()}</div></th>`;
   });
-  return [...set].sort(hmSort);
-}
+  html+='</tr></thead><tbody>';
 
-function renderCalendar() {
-  const el = document.getElementById('calTable');
-  if (!el) return;
-
-  const dates = weekDates(weekOffset);
-  const times = weekTimesForMe(dates);
-  const mon = dates[0], sun = dates[6];
-  const label = mon.getMonth() === sun.getMonth()
-    ? `${mon.getDate()} — ${sun.getDate()} ${MONTHS[sun.getMonth()]}`
-    : `${mon.getDate()} ${MONTHS[mon.getMonth()]} — ${sun.getDate()} ${MONTHS[sun.getMonth()]}`;
-  document.getElementById('weekLabel').textContent = label;
-
-  const todayIso = isoOf(new Date());
-  let html = '<thead><tr><th class="time-col"></th>';
-  dates.forEach(d => {
-    const isToday = isoOf(d) === todayIso;
-    html += `<th class="day-head${isToday ? ' today' : ''}">
-      <div class="dow">${DOW_SHORT[d.getDay()]}</div>
-      <div class="dnum">${d.getDate()}</div>
-    </th>`;
-  });
-  html += '</tr></thead><tbody>';
-
-  if (!times.length) {
-    html += `<tr><td colspan="8" class="empty">Расписание пока не задано</td></tr>`;
+  if(!times.length){
+    html+=`<tr><td colspan="8" class="empty">Расписание пока не задано</td></tr>`;
   } else {
-    times.forEach(t => {
-      html += `<tr><td class="time-col">${t}</td>`;
-      dates.forEach(d => {
-        const st = cellState(d, t);
-        if (st === 'mine')      html += `<td class="cell mine">занятие</td>`;
-        else if (st === 'free') html += `<td class="cell free">свободно</td>`;
-        else                    html += `<td class="cell taken">—</td>`;
+    times.forEach(t=>{
+      html+=`<tr><td class="time-col">${t}</td>`;
+      dates.forEach(d=>{
+        const st=cellState(d,t);
+        if(st.kind==='mine'){
+          const slots=slotsCovered(st.startTime,st.durMin);
+          const idx=slots.indexOf(t);
+          const isStart=idx===0, isEnd=idx===slots.length-1;
+          const cls=isStart?'cell mine-top':isEnd?'cell mine-bot':'cell mine-mid';
+          const content=isStart?`занятие<br><span style="font-size:9px;opacity:.7">${durText(st.durMin)}</span>`:'';
+          html+=`<td class="${cls}">${content}</td>`;
+        } else if(st.kind==='free'){
+          html+=`<td class="cell free">свободно</td>`;
+        } else {
+          html+=`<td class="cell taken">—</td>`;
+        }
       });
-      html += '</tr>';
+      html+='</tr>';
     });
   }
-  html += '</tbody>';
-  el.innerHTML = html;
+  html+='</tbody>';
+  el.innerHTML=html;
 }
 
-window.shiftWeek = function(n) { weekOffset += n; renderCalendar(); };
-window.goToday  = function() { weekOffset = 0; renderCalendar(); };
+window.shiftWeek=function(n){ weekOffset+=n; renderCalendar(); };
+window.goToday=function(){ weekOffset=0; renderCalendar(); };
 
-// ── Полный рендер страницы ────────────────────────────
-function render() {
-  const bal  = balance();
-  const paid = (me.payments || []).reduce((a,p) => a + (p.lessons||0), 0);
-  const used = (me.lessons  || []).reduce((a,l) => a + (l.count||0), 0);
-  const bc = bal > 2 ? 'ok' : bal > 0 ? 'warn' : 'low';
+function render(){
+  const bal=balance();
+  const paid=(me.payments||[]).reduce((a,p)=>a+(p.lessons||0),0);
+  const used=(me.lessons||[]).reduce((a,l)=>a+(l.count||0),0);
+  const bc=bal>2?'ok':bal>0?'warn':'low';
 
-  const slots = [...(me.schedule || [])]
-    .sort((a,b) => (a.dow === 0 ? 7 : a.dow) - (b.dow === 0 ? 7 : b.dow) || hmToMin(a.time) - hmToMin(b.time));
+  const slots=[...(me.schedule||[])].sort((a,b)=>(a.dow===0?7:a.dow)-(b.dow===0?7:b.dow)||hmToMin(a.time)-hmToMin(b.time));
+  const slotsHtml=slots.length
+    ?slots.map(sl=>`<span class="chip">${DOW_FULL[sl.dow]}, ${sl.time} · ${durText(sl.durMin||60)}</span>`).join('')
+    :`<span style="font-size:14px;color:var(--muted)">Постоянное расписание пока не задано</span>`;
 
-  const slotsHtml = slots.length
-    ? slots.map(sl => `<span class="chip">${DOW_FULL[sl.dow]}, ${sl.time}</span>`).join('')
-    : `<span style="font-size:14px;color:var(--muted)">Постоянное расписание пока не задано</span>`;
+  const rows=[...(me.payments||[]).map(p=>({...p,_t:'pay'})),...(me.lessons||[]).map(l=>({...l,_t:'use'}))].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const tBody=rows.length?rows.map(r=>{
+    if(r._t==='pay')return`<tr><td>${fmtDate(r.date)}</td><td><span class="tag tag-pay">Оплата</span></td><td style="color:var(--success);font-weight:600;font-variant-numeric:tabular-nums">+${r.lessons} зан.</td><td style="color:var(--muted)">${r.note?esc(r.note):'—'}</td></tr>`;
+    return`<tr><td>${fmtDate(r.date)}</td><td><span class="tag tag-use">Занятие</span></td><td style="color:var(--muted);font-variant-numeric:tabular-nums">−${r.count} зан.</td><td style="color:var(--muted)">${r.note?esc(r.note):'—'}</td></tr>`;
+  }).join(''):`<tr><td colspan="4" class="empty">Записей пока нет</td></tr>`;
 
-  const rows = [
-    ...(me.payments || []).map(p => ({...p, _t:'pay'})),
-    ...(me.lessons  || []).map(l => ({...l, _t:'use'})),
-  ].sort((a,b) => (b.date||'').localeCompare(a.date||''));
-
-  const tBody = rows.length ? rows.map(r => {
-    if (r._t === 'pay') {
-      return `<tr>
-        <td>${fmtDate(r.date)}</td>
-        <td><span class="tag tag-pay">Оплата</span></td>
-        <td style="color:var(--success);font-weight:600;font-variant-numeric:tabular-nums">+${r.lessons} зан.</td>
-        <td style="color:var(--muted)">${r.note ? esc(r.note) : '—'}</td>
-      </tr>`;
-    }
-    return `<tr>
-      <td>${fmtDate(r.date)}</td>
-      <td><span class="tag tag-use">Занятие</span></td>
-      <td style="color:var(--muted);font-variant-numeric:tabular-nums">−${r.count} зан.</td>
-      <td style="color:var(--muted)">${r.note ? esc(r.note) : '—'}</td>
-    </tr>`;
-  }).join('') : `<tr><td colspan="4" class="empty">Записей пока нет</td></tr>`;
-
-  document.getElementById('content').innerHTML = `
+  document.getElementById('content').innerHTML=`
     <div class="header">
       <h1>${esc(me.name)}</h1>
-      ${me.subject ? `<div class="subject">${esc(me.subject)}</div>` : ''}
+      ${me.subject?`<div class="subject">${esc(me.subject)}</div>`:''}
     </div>
-
     <div class="card">
       <div class="stats">
         <div class="stat"><div class="stat-lbl">Остаток</div><div class="stat-val ${bc}">${bal}</div></div>
@@ -377,31 +246,26 @@ function render() {
         <div class="stat"><div class="stat-lbl">Проведено</div><div class="stat-val">${used}</div></div>
       </div>
     </div>
-
     <div class="card">
       <div class="card-hd"><h2>Моё расписание</h2></div>
       <div class="slots">${slotsHtml}</div>
     </div>
-
     <div class="card">
       <div class="card-hd">
         <div class="cal-nav">
-          <button class="nav-btn" onclick="shiftWeek(-1)" aria-label="Предыдущая неделя">←</button>
+          <button class="nav-btn" onclick="shiftWeek(-1)">←</button>
           <span class="week-label" id="weekLabel"></span>
-          <button class="nav-btn" onclick="shiftWeek(1)" aria-label="Следующая неделя">→</button>
+          <button class="nav-btn" onclick="shiftWeek(1)">→</button>
           <button class="nav-btn" onclick="goToday()">Сегодня</button>
         </div>
       </div>
-      <div style="overflow-x:auto">
-        <table class="cal" id="calTable"></table>
-      </div>
+      <div style="overflow-x:auto"><table class="cal" id="calTable"></table></div>
       <div class="legend">
         <span><i style="background:var(--accent-lt);border-color:var(--accent)"></i>ваше занятие</span>
-        <span><i style="background:var(--success-lt)"></i>свободно (можно перенестись)</span>
+        <span><i style="background:var(--success-lt)"></i>свободно (перенос)</span>
         <span><i style="background:var(--raised)"></i>недоступно</span>
       </div>
     </div>
-
     <div class="card">
       <div class="card-hd"><h2>История занятий</h2></div>
       <table class="data">
@@ -409,46 +273,30 @@ function render() {
         <tbody>${tBody}</tbody>
       </table>
     </div>
-
-    <div class="footer">
-      Данные обновляются автоматически.<br>
-      Если нужно перенести занятие — выберите удобное свободное окно и напишите преподавателю.
-    </div>
-  `;
-
+    <div class="footer">Данные обновляются автоматически.<br>Если нужно перенести занятие — выберите свободное окно и напишите преподавателю.</div>`;
   renderCalendar();
 }
 
-function showError(msg) {
-  document.getElementById('content').innerHTML =
-    `<div class="error"><div class="error-icon">⚠️</div><p>${esc(msg)}</p></div>`;
+function showError(msg){
+  document.getElementById('content').innerHTML=`<div class="error"><div class="error-icon">⚠️</div><p>${esc(msg)}</p></div>`;
 }
 
-async function boot() {
-  if (!studentId) {
-    showError('Неверная ссылка. Попросите преподавателя выслать правильную ссылку.');
-    return;
-  }
-  try {
-    const [meRes, setRes] = await Promise.all([
-      supabase.from('students').select('*').eq('id', studentId).single(),
+async function boot(){
+  if(!studentId){ showError('Неверная ссылка. Попросите преподавателя выслать правильную ссылку.'); return; }
+  try{
+    const[meRes,setRes]=await Promise.all([
+      supabase.from('students').select('*').eq('id',studentId).single(),
       supabase.from('settings').select('*'),
     ]);
-    if (meRes.error) throw meRes.error;
-    if (!meRes.data) { showError('Ученик не найден. Проверьте ссылку.'); return; }
-    me = meRes.data;
-
-    const rows = setRes.data || [];
-    const wh = rows.find(r => r.key === 'work_hours');
-    workHours = (wh && wh.value) ? wh.value : {};
-
+    if(meRes.error)throw meRes.error;
+    if(!meRes.data){ showError('Ученик не найден. Проверьте ссылку.'); return; }
+    me=meRes.data;
+    const rows=setRes.data||[];
+    const wh=rows.find(r=>r.key==='work_hours');
+    workHours=(wh&&wh.value)?wh.value:{};
     render();
-  } catch (e) {
-    console.error(e);
-    showError('Ошибка загрузки данных. Проверьте подключение к интернету.');
-  }
+  }catch(e){ console.error(e); showError('Ошибка загрузки данных. Проверьте подключение.'); }
 }
-
 boot();
 </script>
 </body>
